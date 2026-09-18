@@ -1,0 +1,27 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+db.sqlite3
+.venv/
+venv/
+env/
+.env
+
+# PyInstaller
+dist/
+build/
+*.spec
+
+# Flutter
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Entorno local
+ABBAMAT_PORTABLE/
+.idea/
+.vscode/
