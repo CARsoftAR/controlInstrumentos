@@ -123,9 +123,10 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>?> getDashboardStats() async {
+  Future<Map<String, dynamic>?> getDashboardStats({String? categoria}) async {
     try {
-      final response = await _dio.get('dashboard/stats/');
+      final queryParam = (categoria != null && categoria.isNotEmpty) ? '?categoria=${Uri.encodeComponent(categoria)}' : '';
+      final response = await _dio.get('dashboard/stats/$queryParam');
       if (response.statusCode == 200) {
         return response.data as Map<String, dynamic>;
       }
@@ -179,6 +180,49 @@ class ApiService {
     try {
       final response = await _dio.delete('instrumentos/eliminar/$codigo/');
       if (response.statusCode == 200) return {'success': true};
+      return {'success': false, 'message': 'Error del servidor'};
+    } catch (e) {
+      return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
+  Future<List<dynamic>> getUbicaciones() async {
+    try {
+      final response = await _dio.get('ubicaciones_api/');
+      if (response.statusCode == 200) {
+        return response.data as List<dynamic>;
+      }
+      return [];
+    } catch (e) {
+      print("Error al conectar con la API de Ubicaciones: $e");
+      return [];
+    }
+  }
+
+  Future<Map<String, dynamic>> createUbicacion(Map<String, dynamic> datos) async {
+    try {
+      final response = await _dio.post('ubicaciones_api/', data: datos);
+      if (response.statusCode == 201 || response.statusCode == 200) return {'success': true, 'data': response.data};
+      return {'success': false, 'message': 'Error del servidor'};
+    } catch (e) {
+      return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
+  Future<Map<String, dynamic>> updateUbicacion(int id, Map<String, dynamic> datos) async {
+    try {
+      final response = await _dio.put('ubicaciones_api/$id/', data: datos);
+      if (response.statusCode == 200) return {'success': true};
+      return {'success': false, 'message': 'Error del servidor'};
+    } catch (e) {
+      return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteUbicacion(int id) async {
+    try {
+      final response = await _dio.delete('ubicaciones_api/$id/');
+      if (response.statusCode == 204 || response.statusCode == 200) return {'success': true};
       return {'success': false, 'message': 'Error del servidor'};
     } catch (e) {
       return {'success': false, 'message': _handleError(e)};
@@ -447,5 +491,91 @@ class ApiService {
       print("Error fetching debug db path: $e");
     }
     return 'Desconocida o no accesible';
+  }
+
+  Future<List<dynamic>> getInstrumentAuditLogs(String codigo) async {
+    try {
+      final response = await _dio.get('instrumentos/auditoria/$codigo/');
+      if (response.statusCode == 200) {
+        return response.data['logs'] as List<dynamic>;
+      }
+      return [];
+    } catch (e) {
+      print("Error al conectar con la API de Auditoría: $e");
+      return [];
+    }
+  }
+
+  Future<Map<String, dynamic>?> getGlobalAuditLogs({String search = '', String action = ''}) async {
+    try {
+      final queryParamSearch = search.isNotEmpty ? 'search=${Uri.encodeComponent(search)}' : '';
+      final queryParamAction = action.isNotEmpty ? 'action=${Uri.encodeComponent(action)}' : '';
+      final List<String> params = [];
+      if (queryParamSearch.isNotEmpty) params.add(queryParamSearch);
+      if (queryParamAction.isNotEmpty) params.add(queryParamAction);
+      
+      final queryString = params.isNotEmpty ? '?${params.join('&')}' : '';
+      final response = await _dio.get('auditoria/$queryString');
+      if (response.statusCode == 200) {
+        return response.data as Map<String, dynamic>;
+      }
+      return null;
+    } catch (e) {
+      print("Error al conectar con la API global de Auditoría: $e");
+      return null;
+    }
+  }
+
+  Future<List<int>?> exportarFichaPdf(String codigo) async {
+    try {
+      final response = await _dio.get(
+        'reportes/pdf/ficha/$codigo/',
+        options: Options(responseType: ResponseType.bytes),
+      );
+      if (response.statusCode == 200) {
+        return response.data as List<int>;
+      }
+      return null;
+    } catch (e) {
+      print("Error al exportar ficha PDF: $e");
+      return null;
+    }
+  }
+
+  Future<List<int>?> exportarReporteVencidosPdf() async {
+    try {
+      final response = await _dio.get(
+        'reportes/pdf/vencidos/',
+        options: Options(responseType: ResponseType.bytes),
+      );
+      if (response.statusCode == 200) {
+        return response.data as List<int>;
+      }
+      return null;
+    } catch (e) {
+      print("Error al exportar reporte de vencidos PDF: $e");
+      return null;
+    }
+  }
+
+  Future<List<int>?> exportarInventarioPdf({String search = '', String estado = ''}) async {
+    try {
+      final List<String> params = [];
+      if (search.isNotEmpty) params.add('search=${Uri.encodeComponent(search)}');
+      if (estado.isNotEmpty) params.add('estado=${Uri.encodeComponent(estado)}');
+      final query = params.isNotEmpty ? '?${params.join('&')}' : '';
+      
+      final response = await _dio.get(
+        'reportes/pdf/inventario/$query',
+        options: Options(responseType: ResponseType.bytes),
+      );
+      if (response.statusCode == 200) {
+        return response.data as List<int>;
+      }
+      return null;
+    } catch (e) {
+      print("Error al exportar inventario PDF: $e");
+      return null;
+    }
   }
 }

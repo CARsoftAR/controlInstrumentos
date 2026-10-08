@@ -95,24 +95,7 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSectionTitle('Datos Institucionales', Icons.domain),
-                const SizedBox(height: 16),
-                _buildCard([
-                  _buildTextField(
-                    label: 'Nombre de la Empresa',
-                    initialValue: _companyName,
-                    icon: Icons.business,
-                    onSaved: (val) => _companyName = val ?? '',
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    label: 'Nombre de la Planta / Sucursal',
-                    initialValue: _plantName,
-                    icon: Icons.factory,
-                    onSaved: (val) => _plantName = val ?? '',
-                  ),
-                ]),
-                const SizedBox(height: 32),
+
                 
                 _buildSectionTitle('Almacenamiento de Reportes', Icons.folder_special),
                 const SizedBox(height: 16),
@@ -227,26 +210,7 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
     );
   }
 
-  Widget _buildTextField({
-    required String label,
-    required String initialValue,
-    required IconData icon,
-    required FormFieldSetter<String> onSaved,
-  }) {
-    return TextFormField(
-      initialValue: initialValue,
-      style: const TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon, color: Colors.grey),
-        filled: true,
-        fillColor: const Color(0xff12141c),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
-      ),
-      validator: (val) => (val == null || val.trim().isEmpty) ? 'Requerido' : null,
-      onSaved: onSaved,
-    );
-  }
+
 
   Widget _buildNumberField({
     required String label,

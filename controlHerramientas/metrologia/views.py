@@ -1,9 +1,102 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from datetime import date
 import json
-from .models import Instrumento, Prestamo, HistorialCalibracion, SystemConfiguration
+from .models import Instrumento, Prestamo, HistorialCalibracion, SystemConfiguration, Ubicacion, InstrumentAuditLog
 from personal.models import Operario
+from pathlib import Path
+from pathlib import Path
+import os
+import shutil
+from datetime import datetime as dt
 
+def log_audit_event(instrument, action_type, details='', user=None, section_assigned=''):
+    try:
+        InstrumentAuditLog.objects.create(
+            instrument=instrument,
+            action_type=action_type,
+            performed_by=user if user and user.is_authenticated else None,
+            section_assigned=section_assigned,
+            details=details
+        )
+    except Exception as e:
+        print(f"Error logging audit event: {e}")
+
+@csrf_exempt
+def listar_auditoria(request, codigo):
+    try:
+        logs = InstrumentAuditLog.objects.filter(instrument_id=codigo).order_by('-timestamp')
+        data = []
+        for log in logs:
+            data.append({
+                'id': log.id,
+                'action_type': log.action_type,
+                'performed_by': log.performed_by.username if log.performed_by else 'Sistema/Usuario Local',
+                'section_assigned': log.section_assigned or '',
+                'timestamp': log.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+                'details': log.details or ''
+            })
+        return JsonResponse({'success': True, 'logs': data})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+@csrf_exempt
+def listar_auditoria_global(request):
+    try:
+        from django.db.models import Q
+        import datetime
+        from django.utils import timezone
+        
+        query = InstrumentAuditLog.objects.select_related('instrument', 'performed_by').all().order_by('-timestamp')
+        
+        # Filtros
+        search = request.GET.get('search', '')
+        action = request.GET.get('action', '')
+        
+        if search:
+            query = query.filter(
+                Q(instrument__codigo__icontains=search) | 
+                Q(instrument__nombre__icontains=search) |
+                Q(section_assigned__icontains=search)
+            )
+            
+        if action:
+            query = query.filter(action_type__icontains=action)
+            
+        # Contadores rápidos
+        today = timezone.now().date()
+        movimientos_hoy = InstrumentAuditLog.objects.filter(timestamp__date=today).count()
+        
+        week_ago = today - datetime.timedelta(days=7)
+        movimientos_semana = InstrumentAuditLog.objects.filter(timestamp__date__gte=week_ago).count()
+        
+        # Limitar resultados para no saturar
+        logs = query[:200]
+        
+        data = []
+        for log in logs:
+            data.append({
+                'id': log.id,
+                'codigo_instrumento': log.instrument.codigo,
+                'nombre_instrumento': log.instrument.nombre,
+                'action_type': log.action_type,
+                'performed_by': log.performed_by.username if log.performed_by else 'Sistema/Usuario Local',
+                'section_assigned': log.section_assigned or '',
+                'timestamp': log.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+                'details': log.details or ''
+            })
+            
+        return JsonResponse({
+            'success': True, 
+            'logs': data,
+            'stats': {
+                'hoy': movimientos_hoy,
+                'semana': movimientos_semana,
+                'total_filtrados': query.count()
+            }
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
 def listar_instrumentos(request):
     instrumentos = Instrumento.objects.all()
@@ -16,7 +109,8 @@ def listar_instrumentos(request):
             'modelo': inst.modelo,
             'serie': inst.serie,
             'marca': inst.marca,
-            'ubicacion': inst.ubicacion,
+            'ubicacion_id': inst.ubicacion_id,
+            'ubicacion': inst.ubicacion.nombre if inst.ubicacion else '',
             'frecuencia_control': inst.frecuencia_control,
             'ultima_calibracion': str(inst.ultima_calibracion) if inst.ultima_calibracion else None,
             'vencimiento_calibracion': str(inst.vencimiento_calibracion) if inst.vencimiento_calibracion else None,
@@ -35,11 +129,17 @@ def dashboard_stats(request):
     from django.db.models import Q
     today = date.today()
 
-    total = Instrumento.objects.count()
+    categoria = request.GET.get('categoria', '')
+    query_base = Instrumento.objects.all()
+    if categoria:
+        query_base = query_base.filter(nombre__iexact=categoria)
+
+    total = query_base.count()
     
     from django.db.models import Count
-    base_counts = dict(Instrumento.objects.values_list('estado').annotate(c=Count('codigo')))
-    vencidos_qs = Instrumento.objects.filter(
+    base_counts = dict(query_base.values_list('estado').annotate(c=Count('codigo')))
+    
+    vencidos_qs = query_base.filter(
         vencimiento_calibracion__isnull=False,
         vencimiento_calibracion__lt=today
     ).exclude(estado__in=['BAJA', 'REPARACION'])
@@ -66,6 +166,14 @@ def dashboard_stats(request):
     # Filtramos para no enviar estados con 0 a la UI
     distribucion_estados = {k: v for k, v in distribucion.items() if v > 0}
 
+    # Distribucion por categoria LOCAL (filtrada)
+    local_nombres_counts = dict(query_base.exclude(estado__in=['BAJA', 'REPARACION']).values_list('nombre').annotate(c=Count('codigo')))
+    distribucion_categorias = {str(k).upper(): v for k, v in local_nombres_counts.items() if k}
+
+    # Distribucion por categoria GLOBAL para la barra lateral
+    global_nombres_counts = dict(Instrumento.objects.exclude(estado__in=['BAJA', 'REPARACION']).values_list('nombre').annotate(c=Count('codigo')))
+    global_categorias = {str(k).upper(): v for k, v in global_nombres_counts.items() if k}
+
     # Compatibilidad con variables estáticas que esperaba el front antes
     aptos = distribucion_estados.get('APTO', 0)
     en_uso = distribucion_estados.get('EN USO', 0)
@@ -77,8 +185,8 @@ def dashboard_stats(request):
     alert_days = config.alert_days_threshold
     
     proximos_data = []
-    # Generar proximos_data iterando sobre los que estan activos
-    for inst in Instrumento.objects.exclude(estado__in=['BAJA', 'REPARACION']):
+    # Generar proximos_data iterando sobre los que estan activos (y filtrados por categoria)
+    for inst in query_base.exclude(estado__in=['BAJA', 'REPARACION']):
         if inst.vencimiento_calibracion:
             vto = inst.vencimiento_calibracion
             if isinstance(vto, str):
@@ -115,6 +223,8 @@ def dashboard_stats(request):
         'total_operarios': total_operarios,
         'proximos_vencimientos': proximos_data,
         'distribucion_estados': distribucion_estados,
+        'distribucion_categorias': distribucion_categorias,
+        'global_categorias': global_categorias,
         'alert_days_threshold': alert_days,
     })
 
@@ -202,8 +312,17 @@ def crear_prestamo(request):
                 observaciones=data.get('observaciones', '')
             )
             # Opcional: Cambiar estado del instrumento a 'EN PRESTAMO'
+            estado_anterior = instrumento.estado
             instrumento.estado = 'EN USO'
             instrumento.save()
+            
+            log_audit_event(
+                instrument=instrumento,
+                action_type='PRÉSTAMO/SALIDA',
+                user=request.user,
+                section_assigned=operario.nombre,
+                details=f"Préstamo a operario {operario.legajo} - {operario.nombre}. Cambio de estado: {estado_anterior} -> EN USO"
+            )
             return JsonResponse({'success': True, 'id': prestamo.id})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)}, status=400)
@@ -230,7 +349,7 @@ def crear_instrumento(request):
                 rango=data.get('rango', ''),
                 modelo=data.get('modelo', ''),
                 serie=data.get('serie', ''),
-                ubicacion=data.get('ubicacion', ''),
+                ubicacion_id=data.get('ubicacion_id') or None,
                 frecuencia_control=frec_val,
                 num_certificado=data.get('num_certificado', ''),
                 observacion=data.get('observacion', ''),
@@ -245,6 +364,12 @@ def crear_instrumento(request):
                     num_certificado=inst.num_certificado or '',
                     observacion='Registro de calibración inicial'
                 )
+            log_audit_event(
+                instrument=inst,
+                action_type='CREACIÓN',
+                user=request.user,
+                details=f"Instrumento creado con estado {inst.estado}"
+            )
             return JsonResponse({'success': True, 'codigo': inst.codigo})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)}, status=400)
@@ -284,8 +409,17 @@ def devolver_prestamo(request, id):
             prestamo.estado = 'DEVUELTO'
             prestamo.fecha_devolucion = timezone.now()
             prestamo.save()
+            
+            estado_anterior = prestamo.instrumento.estado
             prestamo.instrumento.estado = 'APTO'
             prestamo.instrumento.save()
+            
+            log_audit_event(
+                instrument=prestamo.instrumento,
+                action_type='DEVOLUCIÓN',
+                user=request.user,
+                details=f"Devolución de préstamo por operario {prestamo.operario.legajo}. Estado: {estado_anterior} -> APTO"
+            )
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)}, status=400)
@@ -319,8 +453,11 @@ def editar_instrumento(request, codigo):
                 inst.modelo = data['modelo']
             if 'serie' in data:
                 inst.serie = data['serie']
-            if 'ubicacion' in data:
-                inst.ubicacion = data['ubicacion']
+            if 'ubicacion_id' in data:
+                inst.ubicacion_id = data['ubicacion_id'] or None
+            elif 'ubicacion' in data:
+                # Fallback in case old frontend sends it
+                inst.ubicacion_id = data['ubicacion'] or None
             if 'frecuencia_control' in data:
                 val = data['frecuencia_control']
                 inst.frecuencia_control = int(val) if val is not None and str(val).isdigit() else None
@@ -341,6 +478,17 @@ def editar_instrumento(request, codigo):
                     num_certificado=inst.num_certificado or '',
                     observacion='Calibración modificada por edición'
                 )
+                
+            detalles_edicion = "Edición de datos del instrumento."
+            if 'estado' in data:
+                detalles_edicion += f" Nuevo estado: {inst.estado}."
+                
+            log_audit_event(
+                instrument=inst,
+                action_type='MODIFICACIÓN',
+                user=request.user,
+                details=detalles_edicion
+            )
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)}, status=400)
@@ -359,25 +507,58 @@ def debug_db_path(request):
 @api_view(['POST'])
 def crear_backup(request):
     try:
-        db_path = settings.DB_PATH
+        db_path = settings.DATABASES['default']['NAME']
+        db_path_obj = Path(db_path)
         if not os.path.exists(db_path):
             return JsonResponse({'status': 'error', 'message': 'Base de datos no encontrada.'}, status=404)
-        # Se guarda el backup un nivel arriba de la carpeta del sistema para evitar que se comprima a sí mismo
         backups_dir = settings.BASE_DIR.parent / 'Backups_ABBAMAT'
         os.makedirs(backups_dir, exist_ok=True)
         timestamp = dt.now().strftime('%Y-%m-%d_%H-%M-%S')
         backup_name = f'backup_abbamat_{timestamp}'
-        backup_path = backups_dir / backup_name
+        backup_zip_path = backups_dir / f'{backup_name}.zip'
         
-        shutil.make_archive(
-            base_name=str(backup_path),
-            format='zip',
-            root_dir=str(settings.DB_PATH.parent),
-            base_dir=settings.DB_PATH.name
-        )
+        # 1. Crear una copia segura usando el motor nativo de SQLite
+        import sqlite3
+        import zipfile
+        import tempfile
+        
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_db_path = os.path.join(temp_dir, db_path_obj.name)
+            
+            # Conectar a origen y destino para hacer el backup seguro (sin importar bloqueos)
+            source_conn = sqlite3.connect(db_path)
+            dest_conn = sqlite3.connect(temp_db_path)
+            with dest_conn:
+                source_conn.backup(dest_conn)
+            dest_conn.close()
+            source_conn.close()
+            
+            # 2. Comprimir toda la carpeta (BASE_DIR) en el destino final
+            portable_dir = settings.BASE_DIR
+            
+            with zipfile.ZipFile(backup_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                for root, dirs, files in os.walk(portable_dir):
+                    # Evitar empaquetar la carpeta de backups si por error está dentro de BASE_DIR
+                    if 'Backups_ABBAMAT' in dirs:
+                        dirs.remove('Backups_ABBAMAT')
+                        
+                    for file in files:
+                        file_path = os.path.join(root, file)
+                        arcname = os.path.relpath(file_path, portable_dir)
+                        
+                        # Si el archivo es la base de datos, metemos la copia desbloqueada temporal
+                        if os.path.abspath(file_path) == os.path.abspath(db_path):
+                            zipf.write(temp_db_path, arcname=arcname)
+                        else:
+                            # Ignorar compilados de python para no inflar backups en desarrollo
+                            if not file.endswith('.pyc'):
+                                zipf.write(file_path, arcname=arcname)
+                
         return JsonResponse({'status': 'success', 'message': f'Backup creado: {backup_name}.zip'})
     except Exception as e:
-        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        import traceback
+        trace = traceback.format_exc()
+        return JsonResponse({'status': 'error', 'message': f'{str(e)} | Detalles: {trace}'}, status=500)
 
 @api_view(['GET'])
 def listar_backups(request):
@@ -429,13 +610,30 @@ def restaurar_backup(request):
         if not os.path.exists(backup_path):
             return JsonResponse({'status': 'error', 'message': 'Archivo de backup no encontrado.'}, status=404)
         
-        # Extraer db.sqlite3 del zip a la ruta correcta
+        db_path = settings.DATABASES['default']['NAME']
+        db_path_obj = Path(db_path)
+        
         with zipfile.ZipFile(backup_path, 'r') as zip_ref:
-            zip_ref.extract('db.sqlite3', path=str(settings.DB_PATH.parent))
+            # Calcular cómo se llama el archivo dentro del zip (ruta relativa al BASE_DIR)
+            arcname = os.path.relpath(db_path, settings.BASE_DIR)
+            
+            # Formatear a separador POSIX (interno de zipfile) por seguridad
+            arcname_zip = arcname.replace(os.sep, '/')
+            
+            if arcname_zip in zip_ref.namelist():
+                # Extraemos el archivo temporalmente
+                extracted_path = zip_ref.extract(arcname_zip, path=str(settings.BASE_DIR.parent))
+                # Movemos y sobrescribimos el original
+                shutil.move(extracted_path, db_path)
+            else:
+                # Fallback por si era un backup antiguo donde solo estaba db.sqlite3 en la raíz
+                zip_ref.extract(db_path_obj.name, path=str(db_path_obj.parent))
             
         return JsonResponse({'status': 'success', 'message': 'Base de datos restaurada correctamente.'})
     except Exception as e:
-        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        import traceback
+        trace = traceback.format_exc()
+        return JsonResponse({'status': 'error', 'message': f'{str(e)} | Detalles: {trace}'}, status=500)
 
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -649,6 +847,13 @@ def crear_historial_calibracion(request, codigo):
             inst.estado = 'APTO'
             
         inst.save()
+        
+        log_audit_event(
+            instrument=inst,
+            action_type='RECERTIFICACIÓN/CALIBRACIÓN',
+            user=request.user,
+            details=f"Recalibración registrada. Vencimiento actualizado a {fecha_ven}. Certificado: {num_cert}"
+        )
         return JsonResponse({'success': True})
     except Instrumento.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Instrumento no encontrado'}, status=404)
@@ -682,4 +887,39 @@ def configuracion_view(request):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)}, status=400)
             
+    return JsonResponse({'error': 'Invalid method'}, status=405)
+
+from rest_framework import viewsets
+from .serializers import UbicacionSerializer
+
+class UbicacionViewSet(viewsets.ModelViewSet):
+    queryset = Ubicacion.objects.all()
+    serializer_class = UbicacionSerializer
+
+
+@csrf_exempt
+def editar_ubicacion(request, id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            obj = Ubicacion.objects.get(id=id)
+            if 'nombre' in data: obj.nombre = data['nombre']
+            if 'pasillo' in data: obj.pasillo = data['pasillo']
+            if 'estante' in data: obj.estante = data['estante']
+            if 'observaciones' in data: obj.observaciones = data['observaciones']
+            obj.save()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=400)
+    return JsonResponse({'error': 'Invalid method'}, status=405)
+
+@csrf_exempt
+def eliminar_ubicacion(request, id):
+    if request.method == 'DELETE':
+        try:
+            obj = Ubicacion.objects.get(id=id)
+            obj.delete()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=400)
     return JsonResponse({'error': 'Invalid method'}, status=405)

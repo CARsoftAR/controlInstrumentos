@@ -1,0 +1,104 @@
+import os
+import pandas as pd
+from datetime import datetime
+from django.core.management.base import BaseCommand
+from metrologia.models import Instrumento
+
+class Command(BaseCommand):
+    help = 'Importa instrumentos desde un archivo Excel'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--archivo',
+            type=str,
+            help='Ruta absoluta al archivo Excel. Por defecto: C:\\Sistemas ABBAMAT\\control_herramientas_PROYECTO\\INSTRUMENTOSMEDICION.xlsx',
+            default=r'C:\Sistemas ABBAMAT\control_herramientas_PROYECTO\INSTRUMENTOSMEDICION.xlsx'
+        )
+
+    def handle(self, *args, **kwargs):
+        file_path = kwargs['archivo']
+
+        if not os.path.exists(file_path):
+            self.stdout.write(self.style.ERROR(f'No se encontró el archivo: {file_path}'))
+            return
+
+        self.stdout.write(self.style.SUCCESS(f'Leyendo archivo: {file_path}'))
+        
+        try:
+            df = pd.read_excel(file_path)
+            df = df.fillna('')
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(f'Error al leer el archivo Excel: {e}'))
+            return
+
+        nuevos = 0
+        actualizados = 0
+
+        for idx, row in df.iterrows():
+            codigo = str(row.get('codigo', '')).strip()
+            if not codigo:
+                continue
+                
+            def clean_date(val):
+                if pd.isna(val) or val == '':
+                    return None
+                if isinstance(val, datetime):
+                    return val.date()
+                if isinstance(val, pd.Timestamp):
+                    return val.date()
+                try:
+                    return pd.to_datetime(val).date()
+                except:
+                    return None
+                    
+            def clean_int(val):
+                try:
+                    if str(val).strip() == '': return None
+                    return int(float(val))
+                except:
+                    return None
+                    
+            defaults = {
+                'nombre': str(row.get('instrumento', '')).strip(),
+                'rango': str(row.get('rango', '')).strip() if row.get('rango', '') else None,
+                'modelo': str(row.get('modelo', '')).strip() if row.get('modelo', '') else None,
+                'serie': str(row.get('serie', '')).strip() if row.get('serie', '') else None,
+                'marca': str(row.get('marca', '')).strip() if row.get('marca', '') else None,
+                'ubicacion': str(row.get('ubicacion', '')).strip() if row.get('ubicacion', '') else None,
+                'frecuencia_control': clean_int(row.get('frecuencia_control', '')),
+                'ultima_calibracion': clean_date(row.get('ultima_fecha_control', '')),
+                'vencimiento_calibracion': clean_date(row.get('fecha_vencimiento', '')),
+                'num_certificado': str(row.get('num_certificado', '')).strip() if row.get('num_certificado', '') else None,
+                'observacion': str(row.get('observacion', '')).strip() if row.get('observacion', '') else None,
+                'estado': str(row.get('estado', '')).strip().upper() if row.get('estado', '') else 'APTO',
+                'unidad_medida': str(row.get('unidadMedida', '')).strip() if row.get('unidadMedida', '') else None,
+            }
+            
+            # Fecha de baja no tiene un campo directo en el modelo actual. 
+            # Se agrega a la observación.
+            fb = clean_date(row.get('fechaBaja', ''))
+            if fb:
+                obs = defaults['observacion'] or ''
+                obs = obs + f" (Fecha Baja: {fb})"
+                defaults['observacion'] = obs.strip()
+
+            try:
+                obj, created = Instrumento.objects.update_or_create(
+                    codigo=codigo,
+                    defaults=defaults
+                )
+                if created:
+                    nuevos += 1
+                else:
+                    actualizados += 1
+            except Exception as e:
+                self.stdout.write(self.style.WARNING(f'Error al procesar el código {codigo}: {e}'))
+
+        self.stdout.write(self.style.SUCCESS(
+            f'Importación finalizada con éxito.\n'
+            f'- Instrumentos nuevos creados: {nuevos}\n'
+            f'- Instrumentos actualizados: {actualizados}'
+        ))
+        
+        total_bd = Instrumento.objects.count()
+        self.stdout.write(self.style.SUCCESS(f'Total de instrumentos en BD: {total_bd}'))

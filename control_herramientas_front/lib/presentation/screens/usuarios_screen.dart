@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/services/api_service.dart';
+import '../widgets/ios_glass_card.dart';
 
 class UsuariosScreen extends StatefulWidget {
   const UsuariosScreen({super.key});
@@ -40,15 +41,19 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
-            return AlertDialog(
-              backgroundColor: const Color(0xff1e2230),
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              title: const Text('Nuevo Usuario', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              content: SizedBox(
-                width: 400,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+              child: IosGlassCard(
+                padding: const EdgeInsets.all(24),
+                child: SizedBox(
+                  width: 400,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('Nuevo Usuario', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
+                      const SizedBox(height: 24),
                     TextField(
                       decoration: const InputDecoration(
                         labelText: 'Nombre de Usuario',
@@ -77,47 +82,52 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                       activeColor: const Color(0xff06b6d4),
                       onChanged: (val) => setModalState(() => isStaff = val),
                     ),
-                  ],
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: TextButton.styleFrom(foregroundColor: Colors.white54),
+                            child: const Text('Cancelar'),
+                          ),
+                          ElevatedButton(
+                            onPressed: saving ? null : () async {
+                              if (username.isEmpty || password.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Usuario y contraseña son obligatorios'), backgroundColor: Colors.red)
+                                );
+                                return;
+                              }
+                              setModalState(() => saving = true);
+                              final res = await _apiService.crearUsuario(username, password, isStaff);
+                              setModalState(() => saving = false);
+                              if (res['success'] == true) {
+                                Navigator.pop(context);
+                                _cargarUsuarios();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Usuario creado correctamente'), backgroundColor: Colors.green)
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Error: ${res['message']}'), backgroundColor: Colors.red)
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xff10b981),
+                              foregroundColor: Colors.white,
+                            ),
+                            child: saving
+                                ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                                : const Text('Guardar'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(foregroundColor: Colors.white54),
-                  child: const Text('Cancelar'),
-                ),
-                ElevatedButton(
-                  onPressed: saving ? null : () async {
-                    if (username.isEmpty || password.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Usuario y contraseña son obligatorios'), backgroundColor: Colors.red)
-                      );
-                      return;
-                    }
-                    setModalState(() => saving = true);
-                    final res = await _apiService.crearUsuario(username, password, isStaff);
-                    setModalState(() => saving = false);
-                    if (res['success'] == true) {
-                      Navigator.pop(context);
-                      _cargarUsuarios();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Usuario creado correctamente'), backgroundColor: Colors.green)
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Error: ${res['message']}'), backgroundColor: Colors.red)
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff10b981),
-                    foregroundColor: Colors.white,
-                  ),
-                  child: saving
-                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                      : const Text('Guardar'),
-                ),
-              ],
             );
           },
         );
@@ -137,15 +147,19 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
-            return AlertDialog(
-              backgroundColor: const Color(0xff1e2230),
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              title: const Text('Editar Usuario', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              content: SizedBox(
-                width: 400,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+              child: IosGlassCard(
+                padding: const EdgeInsets.all(24),
+                child: SizedBox(
+                  width: 400,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('Editar Usuario', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
+                      const SizedBox(height: 24),
                     TextFormField(
                       initialValue: username,
                       decoration: const InputDecoration(
@@ -175,47 +189,52 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                       activeColor: const Color(0xff06b6d4),
                       onChanged: (val) => setModalState(() => isStaff = val),
                     ),
-                  ],
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: TextButton.styleFrom(foregroundColor: Colors.white54),
+                            child: const Text('Cancelar'),
+                          ),
+                          ElevatedButton(
+                            onPressed: saving ? null : () async {
+                              if (username.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('El nombre de usuario no puede estar vacío'), backgroundColor: Colors.red)
+                                );
+                                return;
+                              }
+                              setModalState(() => saving = true);
+                              final res = await _apiService.editarUsuario(id, username, password, isStaff);
+                              setModalState(() => saving = false);
+                              if (res['success'] == true) {
+                                Navigator.pop(context);
+                                _cargarUsuarios();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Usuario actualizado correctamente'), backgroundColor: Colors.green)
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Error: ${res['message']}'), backgroundColor: Colors.red)
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xff10b981),
+                              foregroundColor: Colors.white,
+                            ),
+                            child: saving
+                                ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                                : const Text('Guardar'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(foregroundColor: Colors.white54),
-                  child: const Text('Cancelar'),
-                ),
-                ElevatedButton(
-                  onPressed: saving ? null : () async {
-                    if (username.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('El nombre de usuario no puede estar vacío'), backgroundColor: Colors.red)
-                      );
-                      return;
-                    }
-                    setModalState(() => saving = true);
-                    final res = await _apiService.editarUsuario(id, username, password, isStaff);
-                    setModalState(() => saving = false);
-                    if (res['success'] == true) {
-                      Navigator.pop(context);
-                      _cargarUsuarios();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Usuario actualizado correctamente'), backgroundColor: Colors.green)
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Error: ${res['message']}'), backgroundColor: Colors.red)
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff10b981),
-                    foregroundColor: Colors.white,
-                  ),
-                  child: saving
-                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                      : const Text('Guardar'),
-                ),
-              ],
             );
           },
         );
@@ -336,12 +355,8 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
           ),
           const SizedBox(height: 24),
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xff1a1d29),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white.withOpacity(0.05)),
-              ),
+            child: IosGlassCard(
+              padding: EdgeInsets.zero,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: ListView(

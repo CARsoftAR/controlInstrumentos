@@ -8,6 +8,13 @@ import 'presentation/screens/dashboard_screen.dart';
 import 'presentation/screens/usuarios_screen.dart';
 import 'presentation/screens/splash_screen.dart';
 import 'presentation/screens/configuracion_screen.dart';
+import 'presentation/screens/estadisticas_screen.dart';
+import 'presentation/screens/ubicaciones_screen.dart';
+import 'presentation/screens/trazabilidad_screen.dart';
+import 'presentation/screens/reportes_screen.dart';
+import 'presentation/screens/backups_screen.dart';
+import 'presentation/screens/database_manager_screen.dart';
+import 'presentation/widgets/ios_glass_card.dart';
 
 void main() {
   runApp(const ControlHerramientasApp());
@@ -145,6 +152,12 @@ class _MainShellScreenState extends State<MainShellScreen> {
     'Registro de Movimientos y Préstamos',
     'Gestión de Usuarios y Roles',
     'Configuración y Ajustes',
+    'Estadísticas y Métricas',
+    'Gestión de Ubicaciones',
+    'Trazabilidad Global (Auditoría)',
+    'Centro de Reportes (PDF/Excel)',
+    'Copias de Seguridad (Backups)',
+    'Gestor de Base de Datos',
   ];
 
   Widget _getScreenBody() {
@@ -159,6 +172,18 @@ class _MainShellScreenState extends State<MainShellScreen> {
         return const UsuariosScreen();
       case 5:
         return const ConfiguracionScreen();
+      case 6:
+        return const EstadisticasScreen();
+      case 7:
+        return const UbicacionesScreen();
+      case 8:
+        return const TrazabilidadScreen();
+      case 9:
+        return const ReportesScreen();
+      case 10:
+        return const BackupsScreen();
+      case 11:
+        return const DatabaseManagerScreen();
       case 0:
       default:
         return const DashboardScreen();
@@ -170,11 +195,13 @@ class _MainShellScreenState extends State<MainShellScreen> {
     return Scaffold(
       body: Row(
         children: [
-          Container(
-            width: 260,
-            color: const Color(0xff1a1d29),
-            child: Column(
-              children: [
+          IosGlassCard(
+            padding: EdgeInsets.zero,
+            borderRadius: 0,
+            child: SizedBox(
+              width: 260,
+              child: Column(
+                children: [
                 Container(
                   padding: const EdgeInsets.all(24),
                   alignment: Alignment.centerLeft,
@@ -204,13 +231,26 @@ class _MainShellScreenState extends State<MainShellScreen> {
                 ),
                 const Divider(color: Colors.white10, height: 1),
                 const SizedBox(height: 16),
-                _buildMenuItem(0, Icons.dashboard_rounded, 'Dashboard'),
-                _buildMenuItem(1, Icons.badge_rounded, 'Operarios (Planta)'),
-                _buildMenuItem(2, Icons.construction_rounded, 'Instrumentos (Metrología)'),
-                _buildMenuItem(3, Icons.swap_horiz_rounded, 'Préstamos y Asignaciones'),
-                _buildMenuItem(4, Icons.people_alt_rounded, 'Usuarios y Roles'),
-                _buildMenuItem(5, Icons.settings_applications, 'Configuración'),
-                const Spacer(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildMenuItem(0, Icons.dashboard_rounded, 'Dashboard'),
+                        _buildMenuItem(1, Icons.badge_rounded, 'Operarios (Planta)'),
+                        _buildMenuItem(2, Icons.construction_rounded, 'Instrumentos (Metrología)'),
+                        _buildMenuItem(3, Icons.swap_horiz_rounded, 'Préstamos y Asignaciones'),
+                        _buildMenuItem(4, Icons.people_alt_rounded, 'Usuarios y Roles'),
+                        _buildMenuItem(5, Icons.settings_applications, 'Configuración'),
+                        _buildMenuItem(6, Icons.pie_chart_rounded, 'Estadísticas'),
+                        _buildMenuItem(7, Icons.location_on, 'Ubicaciones'),
+                        _buildMenuItem(8, Icons.history_rounded, 'Trazabilidad y Auditoría'),
+                        _buildMenuItem(9, Icons.picture_as_pdf_rounded, 'Reportes y Descargas'),
+                        _buildMenuItem(10, Icons.backup_rounded, 'Copias de Seguridad'),
+                        _buildMenuItem(11, Icons.storage_rounded, 'Gestor de Base de Datos'),
+                      ],
+                    ),
+                  ),
+                ),
                 const Divider(color: Colors.white10, height: 1),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -272,6 +312,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
               ],
             ),
           ),
+          ),
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(32),
@@ -284,13 +325,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
                   ),
                   const SizedBox(height: 24),
                   Expanded(
-                    child: Container(
-                      padding: (_selectedIndex == 1 || _selectedIndex == 2) ? EdgeInsets.zero : const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xff1e2230),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.white.withOpacity(0.05)),
-                      ),
+                    child: IosGlassCard(
+                      padding: (_selectedIndex == 1 || _selectedIndex == 2 || _selectedIndex == 8 || _selectedIndex == 9) ? EdgeInsets.zero : const EdgeInsets.all(16),
                       child: _getScreenBody(),
                     ),
                   ),

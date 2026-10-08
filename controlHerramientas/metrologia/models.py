@@ -1,5 +1,19 @@
 from django.db import models
 
+class Ubicacion(models.Model):
+    nombre = models.CharField(max_length=100)
+    pasillo = models.CharField(max_length=50, null=True, blank=True)
+    estante = models.CharField(max_length=50, null=True, blank=True)
+    observaciones = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        desc = self.nombre
+        if self.pasillo:
+            desc += f" - P:{self.pasillo}"
+        if self.estante:
+            desc += f" - E:{self.estante}"
+        return desc
+
 
 class Instrumento(models.Model):
     codigo = models.CharField(max_length=50, primary_key=True)
@@ -8,7 +22,7 @@ class Instrumento(models.Model):
     modelo = models.CharField(max_length=100, null=True, blank=True)
     serie = models.CharField(max_length=100, null=True, blank=True)
     marca = models.CharField(max_length=100, null=True, blank=True)
-    ubicacion = models.CharField(max_length=100, null=True, blank=True)
+    ubicacion = models.ForeignKey(Ubicacion, on_delete=models.SET_NULL, null=True, blank=True, related_name='instrumentos')
     frecuencia_control = models.IntegerField(null=True, blank=True)
     ultima_calibracion = models.DateField(null=True, blank=True)  # Mapea a 'ultima_fecha_control'
     vencimiento_calibracion = models.DateField(null=True, blank=True)  # Mapea a 'fecha_vencimiento'
@@ -16,6 +30,7 @@ class Instrumento(models.Model):
     observacion = models.TextField(null=True, blank=True)
     estado = models.CharField(max_length=50, default='APTO')
     unidad_medida = models.CharField(max_length=50, null=True, blank=True)  # Mapea a 'unidadMedida'
+    fecha_baja = models.DateField(null=True, blank=True) # Mapea a 'fechaBaja'
     ruta_pdf = models.TextField(null=True, blank=True)
 
     @property
@@ -34,6 +49,26 @@ class Instrumento(models.Model):
         if vto < date.today():
             return 'VENCIDO'
         return self.estado
+
+    def save(self, *args, **kwargs):
+        if self.vencimiento_calibracion:
+            vto = self.vencimiento_calibracion
+            if isinstance(vto, str):
+                from datetime import datetime
+                try:
+                    vto = datetime.strptime(vto[:10], '%Y-%m-%d').date()
+                except ValueError:
+                    vto = None
+            if vto:
+                from datetime import date
+                today = date.today()
+                if vto < today:
+                    if (self.estado or '').upper() not in ['BAJA', 'REPARACION']:
+                        self.estado = 'VENCIDO'
+                else:
+                    if (self.estado or '').upper() == 'VENCIDO':
+                        self.estado = 'APTO'
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.codigo} - {self.nombre}"
@@ -77,3 +112,14 @@ class SystemConfiguration(models.Model):
     def get_config(cls):
         obj, created = cls.objects.get_or_create(pk=1)
         return obj
+
+class InstrumentAuditLog(models.Model):
+    instrument = models.ForeignKey(Instrumento, on_delete=models.CASCADE, related_name='audit_logs')
+    action_type = models.CharField(max_length=100)
+    performed_by = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True)
+    section_assigned = models.CharField(max_length=150, null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    details = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.instrument.codigo} - {self.action_type} - {self.timestamp}"

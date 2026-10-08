@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:open_file/open_file.dart';
+import 'package:intl/intl.dart';
+import 'dart:io';
 import '../../../core/services/api_service.dart';
 import 'instrumentos_screen.dart';
 import '../../features/personal/presentation/operarios_screen.dart';
 import '../../features/prestamos/presentation/prestamos_screen.dart';
 import '../../../core/utils/status_colors.dart';
+import '../widgets/ios_glass_card.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -17,6 +21,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final ApiService _apiService = ApiService();
   bool _isLoading = true;
+  String? _dbPath;
   
   int _totalInstrumentos = 0;
   int _instrumentosAprobados = 0;
@@ -58,6 +63,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> _cargarDatosDashboard() async {
     setState(() => _isLoading = true);
 
+    final dbPath = await _apiService.getDebugDbPath();
+
     // Intento 1: endpoint dedicado del backend (más eficiente)
     final stats = await _apiService.getDashboardStats();
 
@@ -84,6 +91,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _distribucionEstados = {};
         }
         _alertDaysThreshold = stats['alert_days_threshold'] ?? 45;
+        _dbPath = dbPath;
         _isLoading = false;
       });
       return;
@@ -180,6 +188,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _proximosVencimientos = proximos;
         _distribucionEstados = distribucionFallback;
         _alertDaysThreshold = config['alert_days_threshold'] ?? 45;
+        _dbPath = dbPath;
         _isLoading = false;
       });
     }
@@ -190,27 +199,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
       context: context,
       builder: (context) {
         return Dialog(
-          backgroundColor: const Color(0xff121420),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.85,
-            height: MediaQuery.of(context).size.height * 0.85,
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                backgroundColor: const Color(0xff1a1d29),
-                title: Text(title),
-                elevation: 0,
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
-                  )
-                ],
+          child: IosGlassCard(
+            padding: EdgeInsets.zero,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.85,
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: AppBar(
+                  backgroundColor: Colors.transparent,
+                  title: Text(title),
+                  elevation: 0,
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    )
+                  ],
+                ),
+                body: screen,
               ),
-              body: screen,
             ),
           ),
         );
@@ -226,6 +237,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return "${(bytes / (1024 * 1024)).toStringAsFixed(2)} MB";
     }
     return "${(bytes / 1024).toStringAsFixed(2)} KB";
+  }
+
+  Future<void> _exportarPDF(BuildContext context, String filenamePrefix, Future<List<int>?> Function() apiCall) async {
+    try {
+      final bytes = await apiCall();
+      if (bytes == null || bytes.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No se pudo generar el documento PDF.'), backgroundColor: Colors.red)
+        );
+        return;
+      }
+      
+      final appDir = Directory(Platform.resolvedExecutable).parent;
+      final dir = Directory('${appDir.path}\\Reportes');
+      if (!await dir.exists()) {
+        await dir.create(recursive: true);
+      }
+      
+      final timestamp = DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
+      final file = File('${dir.path}\\${filenamePrefix}_$timestamp.pdf');
+      
+      await file.writeAsBytes(bytes);
+      
+      if (Platform.isWindows) {
+        try {
+          await Process.run('cmd', ['/c', 'start', '', file.path], runInShell: true);
+        } catch (e) {
+          print("Error al abrir PDF: $e");
+        }
+      }
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('PDF generado y abierto automáticamente: ${file.path}'),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 4),
+        )
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al guardar PDF: $e'), backgroundColor: Colors.red)
+      );
+    }
   }
 
   Future<void> _cargarBackups() async {
@@ -434,13 +488,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Visión General',
-                style: GoogleFonts.inter(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Visión General',
+                    style: GoogleFonts.inter(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  if (_dbPath != null) ...[
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.black26,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.white12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.storage, size: 14, color: Colors.grey),
+                          const SizedBox(width: 8),
+                          Text(
+                            _dbPath!,
+                            style: const TextStyle(color: Colors.grey, fontSize: 11),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
               ),
               Row(
                 children: [
@@ -524,7 +606,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 value: _proximosVencimientos.length.toString(),
                 icon: Icons.notification_important_outlined,
                 color: Colors.orangeAccent,
-                onTap: () {},
+                onTap: () => _abrirModalCard('Instrumentos PRÓX. A VENCER', const InstrumentosScreen(initialSearchQuery: 'PRÓX. A VENCER')),
               ),
             ],
           ),
@@ -535,17 +617,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               // Gráfico circular
               Expanded(
                 flex: 4,
-                child: Container(
+                child: SizedBox(
                   height: 340,
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: const Color(0xff1e2230),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withOpacity(0.05)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                  child: IosGlassCard(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                       const Text(
                         'Distribución de Instrumentos',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
@@ -587,34 +665,82 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ],
                   ),
                 ),
+                ),
               ),
               const SizedBox(width: 24),
               // Alertas / Próximos Vencimientos
               Expanded(
                 flex: 5,
-                child: Container(
+                child: SizedBox(
                   height: 340,
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: const Color(0xff1e2230),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withOpacity(0.05)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Control y Vencimientos de Calibración ($_alertDaysThreshold días)',
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                  child: IosGlassCard(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Control y Vencimientos de Calibración ($_alertDaysThreshold días)',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                          PopupMenuButton<String>(
+                            tooltip: 'Opciones de Exportación',
+                            color: const Color(0xff1e2230),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.white.withOpacity(0.1))),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.redAccent.withOpacity(0.1),
+                                border: Border.all(color: Colors.redAccent.withOpacity(0.5)),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.picture_as_pdf_rounded, color: Colors.redAccent, size: 18),
+                                  SizedBox(width: 8),
+                                  Text('Exportar Reporte', style: TextStyle(color: Colors.redAccent, fontSize: 13, fontWeight: FontWeight.bold)),
+                                  SizedBox(width: 4),
+                                  Icon(Icons.arrow_drop_down, color: Colors.redAccent, size: 18),
+                                ],
+                              ),
+                            ),
+                            itemBuilder: (context) => [
+                              const PopupMenuItem(
+                                value: 'vencidos',
+                                child: Row(children: [Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 18), SizedBox(width: 12), Text('Reporte Crítico (Vencidos)', style: TextStyle(color: Colors.white))]),
+                              ),
+                              const PopupMenuItem(
+                                value: 'inventario',
+                                child: Row(children: [Icon(Icons.inventory_2_outlined, color: Colors.cyan, size: 18), SizedBox(width: 12), Text('Inventario General', style: TextStyle(color: Colors.white))]),
+                              ),
+                              PopupMenuItem(
+                                value: 'filtrado',
+                                child: Row(children: [Icon(Icons.access_time_rounded, color: Colors.greenAccent, size: 18), SizedBox(width: 12), Text('Próximos a Vencer (${_proximosVencimientos.length})', style: TextStyle(color: Colors.white))]),
+                              ),
+                            ],
+                            onSelected: (value) {
+                              if (value == 'vencidos') {
+                                _exportarPDF(context, 'Vencimientos', () => _apiService.exportarReporteVencidosPdf());
+                              } else if (value == 'inventario') {
+                                _exportarPDF(context, 'Inventario_General', () => _apiService.exportarInventarioPdf());
+                              } else if (value == 'filtrado') {
+                                _exportarPDF(context, 'Inventario_Proximos_Vencer', () => _apiService.exportarInventarioPdf(search: 'PRÓX. A VENCER'));
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
                       Expanded(
                         child: _proximosVencimientos.isEmpty
                             ? Center(
                                 child: Text('No hay vencimientos próximos en los siguientes $_alertDaysThreshold días.', style: const TextStyle(color: Colors.white54, fontSize: 13)),
                               )
                             : ListView.builder(
-                                itemCount: _proximosVencimientos.length > 4 ? 4 : _proximosVencimientos.length,
+                                itemCount: _proximosVencimientos.length,
                                 itemBuilder: (context, index) {
                                   final item = _proximosVencimientos[index];
                                   final dias = item['dias'] as int;
@@ -669,6 +795,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ],
                   ),
                 ),
+                ),
               ),
             ],
           ),
@@ -685,71 +812,52 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required Color color,
     VoidCallback? onTap,
   }) {
-    return Material(
-      color: Colors.transparent,
-      child: Ink(
-        decoration: BoxDecoration(
-          color: const Color(0xff1a1d29),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.3)),
-          boxShadow: [
-            BoxShadow(
-              color: color.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            )
-          ],
-        ),
-        child: InkWell(
-          onTap: onTap,
-          mouseCursor: SystemMouseCursors.click,
-          borderRadius: BorderRadius.circular(16),
-          hoverColor: color.withOpacity(0.1),
-          splashColor: color.withOpacity(0.2),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            child: Row(
+    final isCritical = title == 'VENCIDO' || title == 'PRÓX. A VENCER';
+    
+    return IosGlassCard(
+      onTap: onTap,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: color.withOpacity(isCritical ? 0.25 : 0.15),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: color, size: 28),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: color.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(12),
+                Text(
+                  title,
+                  style: GoogleFonts.inter(
+                    color: isCritical ? Colors.white : Colors.white60,
+                    fontSize: 12,
+                    fontWeight: isCritical ? FontWeight.w600 : FontWeight.w500,
+                    letterSpacing: 0.5,
                   ),
-                  child: Icon(icon, color: color, size: 32),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        value,
-                        style: GoogleFonts.orbitron(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: GoogleFonts.inter(
+                    color: isCritical ? color : Colors.white,
+                    fontSize: 26,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.5,
                   ),
                 ),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }

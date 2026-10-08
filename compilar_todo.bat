@@ -1,4 +1,20 @@
 @echo off
+echo [0/3] Liberando procesos bloqueados...
+:: Mata cualquier proceso de Python, PyInstaller o la app que haya quedado abierto
+taskkill /f /im python.exe >nul 2>&1
+taskkill /f /im dart.exe >nul 2>&1
+:: Reemplaza "control_herramientas.exe" por el nombre real del ejecutable de tu app si es distinto
+taskkill /f /im control_herramientas.exe >nul 2>&1
+
+:: Espera 2 segundos para asegurar que Windows libere los archivos
+timeout /t 2 /nobreak >nul
+
+echo Limpiando directorios antiguos a la fuerza...
+if exist "C:\Sistemas ABBAMAT\control_herramientas_PROYECTO\controlHerramientas\build" rmdir /s /q "C:\Sistemas ABBAMAT\control_herramientas_PROYECTO\controlHerramientas\build"
+if exist "C:\Sistemas ABBAMAT\control_herramientas_PROYECTO\control_herramientas_front\build" rmdir /s /q "C:\Sistemas ABBAMAT\control_herramientas_PROYECTO\control_herramientas_front\build"
+if exist "C:\Sistemas ABBAMAT\control_herramientas_PROYECTO\control_herramientas_front\.dart_tool" rmdir /s /q "C:\Sistemas ABBAMAT\control_herramientas_PROYECTO\control_herramientas_front\.dart_tool"
+
+@echo off
 setlocal EnableDelayedExpansion
 title Creador Portable ABBAMAT
 cd /d "%~dp0"

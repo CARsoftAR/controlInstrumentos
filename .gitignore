@@ -1,7 +1,6 @@
 # Python / Django
 __pycache__/
 *.py[cod]
-*$py.class
 *.sqlite3
 db.sqlite3
 .venv/
@@ -13,6 +12,7 @@ env/
 dist/
 build/
 *.spec
+*.log
 
 # Flutter
 .dart_tool/
@@ -23,5 +23,8 @@ build/
 
 # Entorno local
 ABBAMAT_PORTABLE/
+ABBAMAT_PORTABLE.rar
+Backups_ABBAMAT/
 .idea/
 .vscode/
+.agents/
