@@ -84,7 +84,7 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: const Color(0xff0f172a),
                 ),
               ),
             ],
@@ -95,8 +95,6 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                
                 _buildSectionTitle('Almacenamiento de Reportes', Icons.folder_special),
                 const SizedBox(height: 16),
                 _buildCard([
@@ -106,16 +104,18 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
                       Expanded(
                         child: TextFormField(
                           controller: _reportsBasePathController,
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Color(0xff0f172a)),
                           readOnly: true,
                           decoration: InputDecoration(
                             labelText: 'Carpeta Base de Reportes / PDFs',
-                            prefixIcon: const Icon(Icons.folder_open, color: Colors.grey),
+                            labelStyle: const TextStyle(color: Color(0xff64748b)),
+                            prefixIcon: const Icon(Icons.folder_open, color: Color(0xff64748b)),
                             filled: true,
-                            fillColor: const Color(0xff12141c),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                            fillColor: const Color(0xfff8fafc),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffcbd5e1))),
+                            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffcbd5e1))),
                             helperText: 'Ruta local o de red donde se buscarán los PDFs de instrumentos por defecto.',
-                            helperStyle: const TextStyle(color: Colors.white60),
+                            helperStyle: const TextStyle(color: Color(0xff64748b)),
                           ),
                         ),
                       ),
@@ -134,7 +134,7 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
                           icon: const Icon(Icons.search),
                           label: const Text('Examinar...'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xff374151),
+                            backgroundColor: const Color(0xff4f46e5),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                           ),
@@ -185,11 +185,11 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
   Widget _buildSectionTitle(String title, IconData icon) {
     return Row(
       children: [
-        Icon(icon, color: const Color(0xff06b6d4), size: 24),
+        Icon(icon, color: const Color(0xff0284c7), size: 24),
         const SizedBox(width: 8),
         Text(
           title,
-          style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white70),
+          style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: const Color(0xff0f172a)),
         ),
       ],
     );
@@ -199,9 +199,16 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xff1e2230),
+        color: Colors.white.withOpacity(0.85),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: const Color(0xffe2e8f0)),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 12,
+            offset: Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,8 +216,6 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
       ),
     );
   }
-
-
 
   Widget _buildNumberField({
     required String label,
@@ -221,15 +226,18 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
   }) {
     return TextFormField(
       initialValue: initialValue,
-      style: const TextStyle(color: Colors.white),
+      style: const TextStyle(color: Color(0xff0f172a)),
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: Colors.grey),
+        labelStyle: const TextStyle(color: Color(0xff64748b)),
+        prefixIcon: Icon(icon, color: const Color(0xff64748b)),
         helperText: helperText,
+        helperStyle: const TextStyle(color: Color(0xff64748b)),
         filled: true,
-        fillColor: const Color(0xff12141c),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+        fillColor: const Color(0xfff8fafc),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffcbd5e1))),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffcbd5e1))),
       ),
       validator: (val) {
         if (val == null || val.trim().isEmpty) return 'Requerido';

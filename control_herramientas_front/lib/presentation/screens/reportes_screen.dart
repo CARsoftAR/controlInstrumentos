@@ -83,12 +83,12 @@ class _ReportesScreenState extends State<ReportesScreen> {
               'Centro de Reportes y Exportaciones',
               style: GoogleFonts.inter(
                 fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                color: const Color(0xff0f172a),
               ),
             ),
             if (_isDownloading)
-              const CircularProgressIndicator(color: Color(0xff4f46e5))
+              const CircularProgressIndicator(color: Color(0xff6366f1))
           ],
         ),
         const SizedBox(height: 32),
@@ -104,7 +104,7 @@ class _ReportesScreenState extends State<ReportesScreen> {
               title: 'Inventario General',
               description: 'Listado completo de todos los instrumentos registrados en el pañol.',
               icon: Icons.inventory_2_outlined,
-              color: const Color(0xff06b6d4),
+              color: const Color(0xff0284c7),
               onTap: () => _exportarPDF(context, 'Inventario_General', () => _apiService.exportarInventarioPdf()),
             ),
             _buildReportCard(
@@ -118,7 +118,7 @@ class _ReportesScreenState extends State<ReportesScreen> {
               title: 'Próximos a Vencer',
               description: 'Reporte preventivo de instrumentos que caducarán en los próximos 45 días.',
               icon: Icons.access_time_rounded,
-              color: Colors.orangeAccent,
+              color: Colors.orange,
               onTap: () => _exportarPDF(context, 'Inventario_Proximos_Vencer', () => _apiService.exportarInventarioPdf(search: 'PRÓX. A VENCER')),
             ),
             _buildReportCard(
@@ -169,54 +169,54 @@ class _ReportesScreenState extends State<ReportesScreen> {
       padding: const EdgeInsets.all(24),
       onTap: _isDownloading ? null : onTap,
       child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(icon, color: color, size: 36),
-                ),
-                const Spacer(),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    color: Colors.white54,
-                    fontSize: 13,
-                    height: 1.4,
-                  ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Text(
-                      'GENERAR REPORTE',
-                      style: TextStyle(
-                        color: color,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Icon(Icons.arrow_forward_rounded, color: color, size: 16),
-                  ],
-                ),
-              ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.12),
+              shape: BoxShape.circle,
             ),
+            child: Icon(icon, color: color, size: 36),
+          ),
+          const Spacer(),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Color(0xff0f172a),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            description,
+            style: const TextStyle(
+              color: Color(0xff64748b),
+              fontSize: 13,
+              height: 1.4,
+            ),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Text(
+                'GENERAR REPORTE',
+                style: TextStyle(
+                  color: color,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(Icons.arrow_forward_rounded, color: color, size: 16),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

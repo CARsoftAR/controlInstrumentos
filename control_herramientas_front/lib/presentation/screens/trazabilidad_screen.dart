@@ -53,13 +53,13 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
               'Trazabilidad y Auditoría',
               style: GoogleFonts.inter(
                 fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                color: const Color(0xff0f172a),
               ),
             ),
             IconButton(
               onPressed: _loadData,
-              icon: const Icon(Icons.refresh, color: Colors.white70),
+              icon: const Icon(Icons.refresh, color: Color(0xff64748b)),
               tooltip: 'Actualizar',
             )
           ],
@@ -74,11 +74,11 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: _buildStatCard('Movimientos en 7 días', _stats['semana'].toString(), Icons.date_range_rounded, const Color(0xff06b6d4)),
+              child: _buildStatCard('Movimientos en 7 días', _stats['semana'].toString(), Icons.date_range_rounded, const Color(0xff0284c7)),
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: _buildStatCard('Total Filtrados', _stats['total_filtrados'].toString(), Icons.filter_list_rounded, const Color(0xff8b5cf6)),
+              child: _buildStatCard('Total Filtrados', _stats['total_filtrados'].toString(), Icons.filter_list_rounded, const Color(0xff6366f1)),
             ),
           ],
         ),
@@ -92,15 +92,16 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
               Expanded(
                 flex: 2,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Color(0xff0f172a)),
                   decoration: InputDecoration(
                     hintText: 'Buscar por código, nombre o sección...',
-                    hintStyle: const TextStyle(color: Colors.white38),
-                    prefixIcon: const Icon(Icons.search, color: Colors.white54),
+                    hintStyle: const TextStyle(color: Color(0xff64748b)),
+                    prefixIcon: const Icon(Icons.search, color: Color(0xff64748b)),
                     filled: true,
-                    fillColor: const Color(0xff2a2f4a),
+                    fillColor: const Color(0xfff8fafc),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffe2e8f0))),
                   ),
                   onChanged: (val) {
                     _searchQuery = val;
@@ -113,23 +114,24 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
                 flex: 1,
                 child: DropdownButtonFormField<String>(
                   value: _actionType.isEmpty ? null : _actionType,
-                  dropdownColor: const Color(0xff2a2f4a),
-                  style: const TextStyle(color: Colors.white),
+                  dropdownColor: Colors.white,
+                  style: const TextStyle(color: Color(0xff0f172a)),
                   decoration: InputDecoration(
                     hintText: 'Todas las acciones',
-                    hintStyle: const TextStyle(color: Colors.white38),
+                    hintStyle: const TextStyle(color: Color(0xff64748b)),
                     filled: true,
-                    fillColor: const Color(0xff2a2f4a),
+                    fillColor: const Color(0xfff8fafc),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffe2e8f0))),
                   ),
-                  items: [
-                    const DropdownMenuItem(value: null, child: Text('Todas las acciones')),
-                    const DropdownMenuItem(value: 'CREACIÓN', child: Text('Creación')),
-                    const DropdownMenuItem(value: 'MODIFICACIÓN', child: Text('Modificación')),
-                    const DropdownMenuItem(value: 'PRÉSTAMO', child: Text('Préstamo')),
-                    const DropdownMenuItem(value: 'DEVOLUCIÓN', child: Text('Devolución')),
-                    const DropdownMenuItem(value: 'RECERTIFICACIÓN', child: Text('Recertificación')),
+                  items: const [
+                    DropdownMenuItem(value: null, child: Text('Todas las acciones', style: TextStyle(color: Color(0xff0f172a)))),
+                    DropdownMenuItem(value: 'CREACIÓN', child: Text('Creación', style: TextStyle(color: Color(0xff0f172a)))),
+                    DropdownMenuItem(value: 'MODIFICACIÓN', child: Text('Modificación', style: TextStyle(color: Color(0xff0f172a)))),
+                    DropdownMenuItem(value: 'PRÉSTAMO', child: Text('Préstamo', style: TextStyle(color: Color(0xff0f172a)))),
+                    DropdownMenuItem(value: 'DEVOLUCIÓN', child: Text('Devolución', style: TextStyle(color: Color(0xff0f172a)))),
+                    DropdownMenuItem(value: 'RECERTIFICACIÓN', child: Text('Recertificación', style: TextStyle(color: Color(0xff0f172a)))),
                   ],
                   onChanged: (val) {
                     _actionType = val ?? '';
@@ -143,7 +145,7 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
                 icon: const Icon(Icons.filter_alt_outlined, size: 18),
                 label: const Text('Filtrar'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff4f46e5),
+                  backgroundColor: const Color(0xff6366f1),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -159,9 +161,9 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
           child: IosGlassCard(
             padding: EdgeInsets.zero,
             child: _isLoading
-                ? const Center(child: CircularProgressIndicator(color: Color(0xff4f46e5)))
+                ? const Center(child: CircularProgressIndicator(color: Color(0xff6366f1)))
                 : _logs.isEmpty
-                    ? const Center(child: Text('No hay registros de movimientos.', style: TextStyle(color: Colors.white54)))
+                    ? const Center(child: Text('No hay registros de movimientos.', style: TextStyle(color: Color(0xff64748b))))
                     : ListView.builder(
                         padding: const EdgeInsets.all(24),
                         itemCount: _logs.length,
@@ -182,16 +184,16 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(color: color.withOpacity(0.12), borderRadius: BorderRadius.circular(12)),
             child: Icon(icon, color: color, size: 28),
           ),
           const SizedBox(width: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: const TextStyle(color: Colors.white54, fontSize: 13, fontWeight: FontWeight.w500)),
+              Text(title, style: const TextStyle(color: Color(0xff64748b), fontSize: 13, fontWeight: FontWeight.w600)),
               const SizedBox(height: 4),
-              Text(value, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+              Text(value, style: const TextStyle(color: Color(0xff0f172a), fontSize: 24, fontWeight: FontWeight.bold)),
             ],
           ),
         ],
@@ -202,7 +204,7 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
   Widget _buildLogItem(Map<String, dynamic> log) {
     final actionType = log['action_type'].toString().toUpperCase();
     
-    Color iconColor = Colors.white54;
+    Color iconColor = const Color(0xff64748b);
     IconData iconData = Icons.info_outline;
     if (actionType.contains('CREACIÓN')) {
       iconColor = const Color(0xff10b981);
@@ -211,13 +213,13 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
       iconColor = const Color(0xfff59e0b);
       iconData = Icons.outbox_rounded;
     } else if (actionType.contains('DEVOLUCIÓN')) {
-      iconColor = const Color(0xff3b82f6);
+      iconColor = const Color(0xff0284c7);
       iconData = Icons.move_to_inbox_rounded;
     } else if (actionType.contains('RECERTIFICACIÓN') || actionType.contains('CALIBRACIÓN')) {
       iconColor = const Color(0xff06b6d4);
       iconData = Icons.verified_rounded;
     } else if (actionType.contains('MODIFICACIÓN')) {
-      iconColor = const Color(0xff8b5cf6);
+      iconColor = const Color(0xff6366f1);
       iconData = Icons.edit_note_rounded;
     }
 
@@ -225,7 +227,7 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xff2a2f4a).withOpacity(0.3),
+        color: const Color(0xfff8fafc),
         border: Border(left: BorderSide(color: iconColor, width: 4)),
         borderRadius: BorderRadius.circular(8),
       ),
@@ -235,7 +237,7 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
+              color: iconColor.withOpacity(0.12),
               shape: BoxShape.circle,
             ),
             child: Icon(iconData, color: iconColor, size: 20),
@@ -254,36 +256,36 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen> {
                         const SizedBox(width: 12),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(4)),
+                          decoration: BoxDecoration(color: const Color(0xffe2e8f0), borderRadius: BorderRadius.circular(4)),
                           child: Text(
                             '${log['codigo_instrumento']} - ${log['nombre_instrumento']}',
-                            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                            style: const TextStyle(color: Color(0xff0f172a), fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],
                     ),
-                    Text(log['timestamp'], style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                    Text(log['timestamp'], style: const TextStyle(color: Color(0xff64748b), fontSize: 12)),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Text(
                   log['details']?.toString().isNotEmpty == true ? log['details'] : 'Sin detalles adicionales',
-                  style: const TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
+                  style: const TextStyle(color: Color(0xff334155), fontSize: 13, height: 1.4),
                 ),
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    const Icon(Icons.person_outline, size: 14, color: Colors.white38),
+                    const Icon(Icons.person_outline, size: 14, color: Color(0xff64748b)),
                     const SizedBox(width: 4),
-                    Text('Operador: ${log['performed_by']}', style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                    Text('Operador: ${log['performed_by']}', style: const TextStyle(color: Color(0xff64748b), fontSize: 12)),
                     if (log['section_assigned']?.toString().isNotEmpty == true) ...[
                       const SizedBox(width: 16),
-                      const Icon(Icons.business_center_outlined, size: 14, color: Colors.white38),
+                      const Icon(Icons.business_center_outlined, size: 14, color: Color(0xff64748b)),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           'Asignado a: ${log['section_assigned']}',
-                          style: const TextStyle(color: Colors.white54, fontSize: 12),
+                          style: const TextStyle(color: Color(0xff64748b), fontSize: 12),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),

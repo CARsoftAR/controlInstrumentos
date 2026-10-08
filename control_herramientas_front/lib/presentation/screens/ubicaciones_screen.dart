@@ -43,9 +43,9 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return AlertDialog(
-              backgroundColor: const Color(0xff1e2230),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              title: const Text('Nueva Ubicación', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xffe2e8f0))),
+              title: const Text('Nueva Ubicación', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold)),
               content: SizedBox(
                 width: 400,
                 child: Column(
@@ -54,40 +54,40 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
                     TextField(
                       decoration: const InputDecoration(
                         labelText: 'Nombre / Depósito',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => nombre = val,
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       decoration: const InputDecoration(
                         labelText: 'Pasillo (Opcional)',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => pasillo = val,
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       decoration: const InputDecoration(
                         labelText: 'Estante (Opcional)',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => estante = val,
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       decoration: const InputDecoration(
                         labelText: 'Observaciones',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => observaciones = val,
                     ),
                   ],
@@ -96,7 +96,7 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(foregroundColor: Colors.white54),
+                  style: TextButton.styleFrom(foregroundColor: const Color(0xff64748b)),
                   child: const Text('Cancelar'),
                 ),
                 ElevatedButton(
@@ -157,9 +157,9 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return AlertDialog(
-              backgroundColor: const Color(0xff1e2230),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              title: const Text('Editar Ubicación', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xffe2e8f0))),
+              title: const Text('Editar Ubicación', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold)),
               content: SizedBox(
                 width: 400,
                 child: Column(
@@ -169,10 +169,10 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
                       initialValue: nombre,
                       decoration: const InputDecoration(
                         labelText: 'Nombre / Depósito',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => nombre = val,
                     ),
                     const SizedBox(height: 16),
@@ -180,10 +180,10 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
                       initialValue: pasillo,
                       decoration: const InputDecoration(
                         labelText: 'Pasillo',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => pasillo = val,
                     ),
                     const SizedBox(height: 16),
@@ -191,10 +191,10 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
                       initialValue: estante,
                       decoration: const InputDecoration(
                         labelText: 'Estante',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => estante = val,
                     ),
                     const SizedBox(height: 16),
@@ -202,10 +202,10 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
                       initialValue: observaciones,
                       decoration: const InputDecoration(
                         labelText: 'Observaciones',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => observaciones = val,
                     ),
                   ],
@@ -214,7 +214,7 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(foregroundColor: Colors.white54),
+                  style: TextButton.styleFrom(foregroundColor: const Color(0xff64748b)),
                   child: const Text('Cancelar'),
                 ),
                 ElevatedButton(
@@ -266,13 +266,14 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: const Color(0xff1a1d29),
-          title: const Text('¿Eliminar ubicación?', style: TextStyle(color: Colors.white)),
-          content: Text('¿Seguro que deseas eliminar la ubicación "$nombre"?', style: const TextStyle(color: Colors.white70)),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xffe2e8f0))),
+          title: const Text('¿Eliminar ubicación?', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold)),
+          content: Text('¿Seguro que deseas eliminar la ubicación "$nombre"?', style: const TextStyle(color: Color(0xff475569))),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar', style: TextStyle(color: Colors.white54)),
+              child: const Text('Cancelar', style: TextStyle(color: Color(0xff64748b))),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -303,7 +304,7 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator(color: Color(0xff4f46e5)));
+      return const Center(child: CircularProgressIndicator(color: Color(0xff6366f1)));
     }
 
     final filteredData = _ubicaciones.where((u) {
@@ -326,18 +327,18 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
                   child: SizedBox(
                     height: 44,
                     child: TextField(
-                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                      style: const TextStyle(color: Color(0xff0f172a), fontSize: 14),
                       decoration: InputDecoration(
                         hintText: 'Buscar ubicación...',
-                        hintStyle: const TextStyle(color: Colors.white54),
-                        prefixIcon: const Icon(Icons.search, color: Colors.white54, size: 20),
+                        hintStyle: const TextStyle(color: Color(0xff64748b)),
+                        prefixIcon: const Icon(Icons.search, color: Color(0xff64748b), size: 20),
                         filled: true,
-                        fillColor: const Color(0xff1e2235),
+                        fillColor: const Color(0xfff8fafc),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.05)),
+                          borderSide: const BorderSide(color: Color(0xffe2e8f0)),
                         ),
                       ),
                       onChanged: (val) => setState(() => _searchQuery = val),
@@ -360,7 +361,7 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
                   const SizedBox(width: 16),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff4f46e5),
+                      backgroundColor: const Color(0xff6366f1),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
@@ -381,14 +382,14 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
                 child: ListView(
                   children: [
                     DataTable(
-                      headingRowColor: MaterialStateProperty.all(const Color(0xff1e2235)),
+                      headingRowColor: MaterialStateProperty.all(const Color(0xfff1f5f9)),
                       dataRowHeight: 52,
                       columns: const [
-                        DataColumn(label: Text('Nombre / Depósito', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
-                        DataColumn(label: Text('Pasillo', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
-                        DataColumn(label: Text('Estante', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
-                        DataColumn(label: Text('Observaciones', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
-                        DataColumn(label: Text('Acciones', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('Nombre / Depósito', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('Pasillo', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('Estante', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('Observaciones', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('Acciones', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold))),
                       ],
                       rows: filteredData.map((u) {
                         final id = u['id'] ?? 0;
@@ -399,15 +400,15 @@ class _UbicacionesScreenState extends State<UbicacionesScreen> {
 
                         return DataRow(
                           cells: [
-                            DataCell(Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500))),
-                            DataCell(Text(pasillo.isEmpty ? '-' : pasillo, style: const TextStyle(color: Colors.white70))),
-                            DataCell(Text(estante.isEmpty ? '-' : estante, style: const TextStyle(color: Colors.white70))),
-                            DataCell(Text(obs, style: const TextStyle(color: Colors.white70))),
+                            DataCell(Text(name, style: const TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.w600))),
+                            DataCell(Text(pasillo.isEmpty ? '-' : pasillo, style: const TextStyle(color: Color(0xff64748b)))),
+                            DataCell(Text(estante.isEmpty ? '-' : estante, style: const TextStyle(color: Color(0xff64748b)))),
+                            DataCell(Text(obs, style: const TextStyle(color: Color(0xff64748b)))),
                             DataCell(
                               Row(
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.edit, color: Colors.blueAccent, size: 20),
+                                    icon: const Icon(Icons.edit, color: Color(0xff0284c7), size: 20),
                                     tooltip: 'Editar Ubicación',
                                     onPressed: () => _mostrarModalEditarUbicacion(u),
                                   ),

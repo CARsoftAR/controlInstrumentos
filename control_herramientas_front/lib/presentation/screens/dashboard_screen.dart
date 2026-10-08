@@ -204,18 +204,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: IosGlassCard(
             padding: EdgeInsets.zero,
+            customColor: const Color(0xfff4f6f9),
+            borderColor: const Color(0xffcbd5e1),
             child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.85,
+              width: MediaQuery.of(context).size.width * 0.88,
+              height: MediaQuery.of(context).size.height * 0.88,
               child: Scaffold(
-                backgroundColor: Colors.transparent,
+                backgroundColor: const Color(0xfff4f6f9),
                 appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  title: Text(title),
+                  backgroundColor: const Color(0xfff1f5f9),
                   elevation: 0,
+                  iconTheme: const IconThemeData(color: Color(0xff0f172a)),
+                  title: Text(title, style: GoogleFonts.inter(color: const Color(0xff0f172a), fontWeight: FontWeight.bold, fontSize: 18)),
                   actions: [
                     IconButton(
-                      icon: const Icon(Icons.close),
+                      icon: const Icon(Icons.close, color: Color(0xff0f172a)),
                       onPressed: () => Navigator.pop(context),
                     )
                   ],
@@ -324,12 +327,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }
 
             return AlertDialog(
-              backgroundColor: const Color(0xff1e2235),
+              backgroundColor: const Color(0xfff8fafc),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Copias de Seguridad (Backups)', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  const Text('Copias de Seguridad (Backups)', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold)),
                   ElevatedButton.icon(
                     onPressed: _loadingBackups ? null : () async {
                       setModalState(() => _loadingBackups = true);
@@ -360,7 +363,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: _loadingBackups 
                     ? const Center(child: CircularProgressIndicator(color: Color(0xff4f46e5)))
                     : _backups.isEmpty
-                        ? const Center(child: Text('No hay copias de seguridad creadas aún.', style: TextStyle(color: Colors.white54)))
+                        ? const Center(child: Text('No hay copias de seguridad creadas aún.', style: TextStyle(color: Color(0xff64748b))))
                         : ListView.builder(
                             itemCount: _backups.length,
                             itemBuilder: (context, index) {
@@ -373,21 +376,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 margin: const EdgeInsets.only(bottom: 8),
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xff1a1d29),
+                                  color: const Color(0xfff1f5f9),
                                   borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: Colors.white.withOpacity(0.05)),
+                                  border: Border.all(color: const Color(0xffe2e8f0)),
                                 ),
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.archive_outlined, color: Color(0xFF276CF5), size: 28),
+                                    const Icon(Icons.archive_outlined, color: Color(0xff4f46e5), size: 28),
                                     const SizedBox(width: 16),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(nombre, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                                          Text(nombre, style: const TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold, fontSize: 13)),
                                           const SizedBox(height: 4),
-                                          Text('Fecha: $fecha  |  Tamaño: ${_formatearTamano(tamano)}', style: const TextStyle(color: Colors.white54, fontSize: 11)),
+                                          Text('Fecha: $fecha  |  Tamaño: ${_formatearTamano(tamano)}', style: const TextStyle(color: Color(0xff64748b), fontSize: 11)),
                                         ],
                                       ),
                                     ),
@@ -395,17 +398,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       icon: const Icon(Icons.delete, color: Colors.redAccent),
                                       tooltip: 'Eliminar esta copia',
                                       onPressed: () async {
-                                        // Cache ScaffoldMessenger using the outer dashboard context
                                         final messenger = ScaffoldMessenger.of(context);
                                         
                                         bool? confirm = await showDialog<bool>(
                                           context: context,
                                           builder: (c) => AlertDialog(
-                                            backgroundColor: const Color(0xff1a1d29),
-                                            title: const Text('¿Eliminar copia?', style: TextStyle(color: Colors.white)),
-                                            content: const Text('¿Seguro que deseas eliminar permanentemente este archivo de copia de seguridad?', style: TextStyle(color: Colors.white70)),
+                                            backgroundColor: const Color(0xfff8fafc),
+                                            title: const Text('¿Eliminar copia?', style: TextStyle(color: Color(0xff0f172a))),
+                                            content: const Text('¿Seguro que deseas eliminar permanentemente este archivo de copia de seguridad?', style: TextStyle(color: Color(0xff475569))),
                                             actions: [
-                                              TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancelar', style: TextStyle(color: Colors.white54))),
+                                              TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancelar', style: TextStyle(color: Color(0xff64748b)))),
                                               ElevatedButton(
                                                 onPressed: () => Navigator.pop(c, true),
                                                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -440,7 +442,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Cerrar', style: TextStyle(color: Colors.white)),
+                  child: const Text('Cerrar', style: TextStyle(color: Color(0xff4f46e5))),
                 )
               ],
             );
@@ -465,7 +467,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           const SizedBox(width: 8),
-          Text(title, style: const TextStyle(color: Colors.white70, fontSize: 13)),
+          Text(title, style: const TextStyle(color: Color(0xff334155), fontSize: 13, fontWeight: FontWeight.w500)),
         ],
       ),
     );
@@ -496,7 +498,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: const Color(0xff0f172a),
                     ),
                   ),
                   if (_dbPath != null) ...[
@@ -504,18 +506,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: Colors.black26,
+                        color: const Color(0xffe2e8f0),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.white12),
+                        border: Border.all(color: const Color(0xffcbd5e1)),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.storage, size: 14, color: Colors.grey),
+                          const Icon(Icons.storage, size: 14, color: Color(0xff64748b)),
                           const SizedBox(width: 8),
                           Text(
                             _dbPath!,
-                            style: const TextStyle(color: Colors.grey, fontSize: 11),
+                            style: const TextStyle(color: Color(0xff475569), fontSize: 11),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],
@@ -538,7 +540,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   const SizedBox(width: 8),
                   IconButton(
-                    icon: const Icon(Icons.refresh, color: Colors.white70),
+                    icon: const Icon(Icons.refresh, color: Color(0xff475569)),
                     onPressed: _cargarDatosDashboard,
                     tooltip: 'Actualizar',
                   ),
@@ -546,12 +548,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
+          // SECCIÓN DESTACADA SUPERIOR (2 COLUMNAS): APTO Y PRÓX. A VENCER
+          Row(
+            children: [
+              Expanded(
+                child: _buildStatCard(
+                  title: 'APTO',
+                  value: (_distribucionEstados['APTO'] ?? _instrumentosAprobados).toString(),
+                  icon: Icons.check_circle_outline,
+                  color: StatusColors.getColor('APTO'),
+                  isFeatured: true,
+                  onTap: () => _abrirModalCard('Instrumentos APTO', const InstrumentosScreen(initialSearchQuery: 'APTO')),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _buildStatCard(
+                  title: 'PRÓX. A VENCER',
+                  value: _proximosVencimientos.length.toString(),
+                  icon: Icons.notification_important_outlined,
+                  color: Colors.orangeAccent,
+                  isFeatured: true,
+                  onTap: () => _abrirModalCard('Instrumentos PRÓX. A VENCER', const InstrumentosScreen(initialSearchQuery: 'PRÓX. A VENCER')),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // RESTO DE MÉTRICAS EN GRID DE 4 COLUMNAS
           GridView.count(
             crossAxisCount: 4,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            childAspectRatio: 2.0,
+            childAspectRatio: 1.85,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             children: [
@@ -563,13 +593,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 onTap: () => _abrirModalCard('TOTAL INSTRUMENTOS', const InstrumentosScreen()),
               ),
               ...[
-                'APTO', 'VENCIDO', 'EN USO', 'REPARACION', 
+                'VENCIDO', 'EN USO', 'REPARACION', 
                 'DE REFERENCIA', 'NO APTO', 'NO EXISTE', 'BAJA'
               ].map((estadoUpper) {
                 final int count = _distribucionEstados[estadoUpper] ?? 0;
                 IconData icon;
                 switch (estadoUpper) {
-                  case 'APTO': icon = Icons.check_circle_outline; break;
                   case 'VENCIDO': icon = Icons.warning_amber_rounded; break;
                   case 'REPARACION': icon = Icons.build_circle_outlined; break;
                   case 'EN USO': icon = Icons.handyman_outlined; break;
@@ -601,13 +630,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 color: const Color(0xFF276CF5),
                 onTap: () => _abrirModalCard('OPERARIOS REGISTRADOS', const OperariosScreen()),
               ),
-              _buildStatCard(
-                title: 'PRÓX. A VENCER',
-                value: _proximosVencimientos.length.toString(),
-                icon: Icons.notification_important_outlined,
-                color: Colors.orangeAccent,
-                onTap: () => _abrirModalCard('Instrumentos PRÓX. A VENCER', const InstrumentosScreen(initialSearchQuery: 'PRÓX. A VENCER')),
-              ),
             ],
           ),
           const SizedBox(height: 32),
@@ -626,7 +648,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                       const Text(
                         'Distribución de Instrumentos',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff0f172a)),
                       ),
                       const SizedBox(height: 20),
                       Expanded(
@@ -634,7 +656,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           children: [
                             Expanded(
                               child: _totalInstrumentos == 0
-                                  ? const Center(child: Text('Sin datos', style: TextStyle(color: Colors.white54)))
+                                  ? const Center(child: Text('Sin datos', style: TextStyle(color: Color(0xff64748b))))
                                   : PieChart(
                                       PieChartData(
                                         sectionsSpace: 4,
@@ -665,9 +687,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ],
                   ),
                 ),
-                ),
               ),
-              const SizedBox(width: 24),
+            ),
+            const SizedBox(width: 24),
               // Alertas / Próximos Vencimientos
               Expanded(
                 flex: 5,
@@ -683,17 +705,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: [
                           Text(
                             'Control y Vencimientos de Calibración ($_alertDaysThreshold días)',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff0f172a)),
                           ),
                           PopupMenuButton<String>(
                             tooltip: 'Opciones de Exportación',
-                            color: const Color(0xff1e2230),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.white.withOpacity(0.1))),
+                            color: const Color(0xffffffff),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xffe2e8f0))),
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               decoration: BoxDecoration(
-                                color: Colors.redAccent.withOpacity(0.1),
-                                border: Border.all(color: Colors.redAccent.withOpacity(0.5)),
+                                color: Colors.redAccent.withOpacity(0.08),
+                                border: Border.all(color: Colors.redAccent.withOpacity(0.4)),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: const Row(
@@ -710,15 +732,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             itemBuilder: (context) => [
                               const PopupMenuItem(
                                 value: 'vencidos',
-                                child: Row(children: [Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 18), SizedBox(width: 12), Text('Reporte Crítico (Vencidos)', style: TextStyle(color: Colors.white))]),
+                                child: Row(children: [Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 18), SizedBox(width: 12), Text('Reporte Crítico (Vencidos)', style: TextStyle(color: Color(0xff0f172a)))]),
                               ),
                               const PopupMenuItem(
                                 value: 'inventario',
-                                child: Row(children: [Icon(Icons.inventory_2_outlined, color: Colors.cyan, size: 18), SizedBox(width: 12), Text('Inventario General', style: TextStyle(color: Colors.white))]),
+                                child: Row(children: [Icon(Icons.inventory_2_outlined, color: Colors.cyan, size: 18), SizedBox(width: 12), Text('Inventario General', style: TextStyle(color: Color(0xff0f172a)))]),
                               ),
                               PopupMenuItem(
                                 value: 'filtrado',
-                                child: Row(children: [Icon(Icons.access_time_rounded, color: Colors.greenAccent, size: 18), SizedBox(width: 12), Text('Próximos a Vencer (${_proximosVencimientos.length})', style: TextStyle(color: Colors.white))]),
+                                child: Row(children: [Icon(Icons.access_time_rounded, color: Colors.green, size: 18), SizedBox(width: 12), Text('Próximos a Vencer (${_proximosVencimientos.length})', style: TextStyle(color: Color(0xff0f172a)))]),
                               ),
                             ],
                             onSelected: (value) {
@@ -737,7 +759,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Expanded(
                         child: _proximosVencimientos.isEmpty
                             ? Center(
-                                child: Text('No hay vencimientos próximos en los siguientes $_alertDaysThreshold días.', style: const TextStyle(color: Colors.white54, fontSize: 13)),
+                                child: Text('No hay vencimientos próximos en los siguientes $_alertDaysThreshold días.', style: const TextStyle(color: Color(0xff64748b), fontSize: 13)),
                               )
                             : ListView.builder(
                                 itemCount: _proximosVencimientos.length,
@@ -745,15 +767,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   final item = _proximosVencimientos[index];
                                   final dias = item['dias'] as int;
                                   final isVencido = item['is_vencido'] == true;
-                                  final color = isVencido ? Colors.redAccent : (dias <= 15 ? Colors.amberAccent : Colors.cyanAccent);
+                                  final color = isVencido ? Colors.redAccent : (dias <= 15 ? Colors.orange : const Color(0xff0284c7));
                                   
                                   return Container(
                                     margin: const EdgeInsets.only(bottom: 8),
                                     padding: const EdgeInsets.all(12),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xff1a1d29),
+                                      color: const Color(0xfff8fafc),
                                       borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: color.withOpacity(0.15)),
+                                      border: Border.all(color: color.withOpacity(0.25)),
                                     ),
                                     child: Row(
                                       children: [
@@ -765,12 +787,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             children: [
                                               Text(
                                                 '${item['codigo']} - ${item['nombre']}',
-                                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
+                                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xff0f172a)),
                                               ),
                                               const SizedBox(height: 2),
                                               Text(
                                                 isVencido ? 'Venció el ${item['fecha']}' : 'Vence el ${item['fecha']}',
-                                                style: const TextStyle(color: Colors.white54, fontSize: 11),
+                                                style: const TextStyle(color: Color(0xff64748b), fontSize: 11),
                                               ),
                                             ],
                                           ),
@@ -778,7 +800,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                           decoration: BoxDecoration(
-                                            color: color.withOpacity(0.1),
+                                            color: color.withOpacity(0.12),
                                             borderRadius: BorderRadius.circular(6),
                                           ),
                                           child: Text(
@@ -795,10 +817,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ],
                   ),
                 ),
-                ),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
           const SizedBox(height: 24),
         ],
       ),
@@ -810,24 +832,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required String value,
     required IconData icon,
     required Color color,
+    bool isFeatured = false,
     VoidCallback? onTap,
   }) {
-    final isCritical = title == 'VENCIDO' || title == 'PRÓX. A VENCER';
-    
+    final double iconSize = isFeatured ? 38.0 : 32.0;
+    final double containerPadding = isFeatured ? 16.0 : 12.0;
+    final double titleFontSize = isFeatured ? 15.0 : 12.0;
+    final double valueFontSize = isFeatured ? 36.0 : 28.0;
+
+    // Use vibrant neon icon color for title & value
+    final Color textColor = (color == Colors.grey || color == const Color(0xff9e9e9e))
+        ? const Color(0xff475569)
+        : color;
+
+    // Soft pastel tint background color mixing state color with white glass
+    final Color cardBackground = Color.alphaBlend(
+      color.withOpacity(0.09),
+      Colors.white,
+    );
+
+    // Fluor / Neon glowing border color matching status color
+    final Color fluorBorder = color.withOpacity(0.55);
+
     return IosGlassCard(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      customColor: cardBackground,
+      borderColor: fluorBorder,
+      padding: EdgeInsets.symmetric(
+        horizontal: isFeatured ? 24 : 16,
+        vertical: isFeatured ? 20 : 14,
+      ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(containerPadding),
             decoration: BoxDecoration(
-              color: color.withOpacity(isCritical ? 0.25 : 0.15),
-              borderRadius: BorderRadius.circular(10),
+              color: color.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: color.withOpacity(0.25), width: 1.2),
             ),
-            child: Icon(icon, color: color, size: 28),
+            child: Icon(icon, color: textColor, size: iconSize),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -836,9 +882,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Text(
                   title,
                   style: GoogleFonts.inter(
-                    color: isCritical ? Colors.white : Colors.white60,
-                    fontSize: 12,
-                    fontWeight: isCritical ? FontWeight.w600 : FontWeight.w500,
+                    color: textColor,
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w800,
                     letterSpacing: 0.5,
                   ),
                   maxLines: 1,
@@ -848,9 +894,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Text(
                   value,
                   style: GoogleFonts.inter(
-                    color: isCritical ? color : Colors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.w700,
+                    color: textColor,
+                    fontSize: valueFontSize,
+                    fontWeight: FontWeight.w900,
                     letterSpacing: -0.5,
                   ),
                 ),

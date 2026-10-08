@@ -749,8 +749,8 @@ class _MaintenanceTabState extends State<_MaintenanceTab> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: const Color(0xff1e2235),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xffe2e8f0))),
           title: const Row(
             children: [
               Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 28),
@@ -763,7 +763,7 @@ class _MaintenanceTabState extends State<_MaintenanceTab> {
             'Solo se eliminarán los instrumentos y sus registros vinculados (como los préstamos e historial asociados a estos).\n'
             'El resto de los datos (personal, configuraciones, usuarios) permanecerán intactos.\n\n'
             '¿Estás seguro de querer proceder con esta acción?',
-            style: TextStyle(color: Colors.white, fontSize: 14),
+            style: TextStyle(color: Color(0xff1e293b), fontSize: 14),
           ),
           actions: [
             TextButton(
@@ -872,8 +872,9 @@ class _MaintenanceTabState extends State<_MaintenanceTab> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                backgroundColor: const Color(0xff1e2235),
-                title: const Text('Resultados de Importación', style: TextStyle(color: Colors.white)),
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xffe2e8f0))),
+                title: const Text('Resultados de Importación', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold)),
                 content: SizedBox(
                   width: double.maxFinite,
                   child: Column(

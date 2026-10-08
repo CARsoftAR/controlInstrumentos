@@ -186,19 +186,23 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
       onChanged: onChanged,
       maxLines: maxLines,
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-      style: const TextStyle(color: Colors.white, fontSize: 14),
+      style: const TextStyle(color: Color(0xff0f172a), fontSize: 14),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.white54, fontSize: 13),
+        labelStyle: const TextStyle(color: Color(0xff64748b), fontSize: 13),
         filled: true,
-        fillColor: const Color(0xff2a2f4a),
+        fillColor: const Color(0xfff8fafc),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 12,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: Color(0xffcbd5e1)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color(0xffcbd5e1)),
         ),
       ),
     );
@@ -213,18 +217,18 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
     return TextFormField(
       controller: controller,
       onChanged: onChanged,
-      style: const TextStyle(color: Colors.white, fontSize: 14),
+      style: const TextStyle(color: Color(0xff0f172a), fontSize: 14),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.white54, fontSize: 13),
+        labelStyle: const TextStyle(color: Color(0xff64748b), fontSize: 13),
         filled: true,
-        fillColor: const Color(0xff2a2f4a),
+        fillColor: const Color(0xfff8fafc),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 12,
         ),
         suffixIcon: IconButton(
-          icon: const Icon(Icons.calendar_today, color: Colors.white54, size: 18),
+          icon: const Icon(Icons.calendar_today, color: Color(0xff64748b), size: 18),
           tooltip: 'Seleccionar fecha',
           onPressed: () async {
             DateTime initialDate = DateTime.tryParse(controller.text.trim()) ?? DateTime.now();
@@ -233,20 +237,7 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
               initialDate: initialDate,
               firstDate: DateTime(2000),
               lastDate: DateTime(2100),
-              builder: (context, child) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    colorScheme: const ColorScheme.dark(
-                      primary: Color(0xff06b6d4),
-                      onPrimary: Colors.white,
-                      surface: Color(0xff1e2235),
-                      onSurface: Colors.white,
-                    ),
-                    dialogBackgroundColor: const Color(0xff1e2235),
-                  ),
-                  child: child!,
-                );
-              },
+              locale: const Locale('es', 'AR'),
             );
             if (picked != null) {
               final formatted = DateFormat('yyyy-MM-dd').format(picked);
@@ -257,7 +248,11 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: Color(0xffcbd5e1)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color(0xffcbd5e1)),
         ),
       ),
     );
@@ -268,9 +263,10 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: const Color(0xff1e2235),
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
+            side: const BorderSide(color: Color(0xffe2e8f0)),
           ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -278,7 +274,7 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
               Text(
                 'Instrumento: ${inst['codigo']}',
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: Color(0xff0f172a),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -740,14 +736,15 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
         return StatefulBuilder(
           builder: (c, setSubState) {
             return AlertDialog(
-              backgroundColor: const Color(0xff1e2235),
+              backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
+                side: const BorderSide(color: Color(0xffe2e8f0)),
               ),
               title: const Text(
                 'Registrar Calibración',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Color(0xff0f172a),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -763,47 +760,48 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                         ),
                       decoration: const InputDecoration(
                         labelText: 'Fecha Calibración (YYYY-MM-DD)',
-                        labelStyle: TextStyle(color: Colors.white70),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
                         enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white24),
+                          borderSide: BorderSide(color: Color(0xffcbd5e1)),
                         ),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => fechaCal = val,
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       decoration: const InputDecoration(
                         labelText: 'Fecha Vencimiento (YYYY-MM-DD)',
-                        labelStyle: TextStyle(color: Colors.white70),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
                         enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white24),
+                          borderSide: BorderSide(color: Color(0xffcbd5e1)),
                         ),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => fechaVen = val,
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       decoration: const InputDecoration(
                         labelText: 'Número de Certificado',
-                        labelStyle: TextStyle(color: Colors.white70),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
                         enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white24),
+                          borderSide: BorderSide(color: Color(0xffcbd5e1)),
                         ),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => numCert = val,
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       decoration: const InputDecoration(
                         labelText: 'Observación',
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
                         enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white24),
+                          borderSide: BorderSide(color: Color(0xffcbd5e1)),
                         ),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => obs = val,
                     ),
                   ],
@@ -814,7 +812,7 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                   onPressed: () => Navigator.pop(c),
                   child: const Text(
                     'Cancelar',
-                    style: TextStyle(color: Colors.white54),
+                    style: TextStyle(color: Color(0xff64748b)),
                   ),
                 ),
                 ElevatedButton(
@@ -961,14 +959,15 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return AlertDialog(
-              backgroundColor: const Color(0xff1e2235),
+              backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
+                side: const BorderSide(color: Color(0xffe2e8f0)),
               ),
               title: const Text(
                 'Nuevo Instrumento',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Color(0xff0f172a),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -1022,15 +1021,20 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                           children: [
                             DropdownButtonFormField<int?>(
                               value: ubicacionId,
-                              dropdownColor: const Color(0xff2a2f4a),
-                              style: const TextStyle(color: Colors.white),
+                              dropdownColor: Colors.white,
+                              style: const TextStyle(color: Color(0xff0f172a)),
                               decoration: InputDecoration(
                                 labelText: 'Ubicación',
+                                labelStyle: const TextStyle(color: Color(0xff64748b), fontSize: 13),
                                 filled: true,
-                                fillColor: const Color(0xff2a2f4a),
+                                fillColor: const Color(0xfff8fafc),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide.none,
+                                  borderSide: const BorderSide(color: Color(0xffcbd5e1)),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(color: Color(0xffcbd5e1)),
                                 ),
                               ),
                               items: [
@@ -1085,15 +1089,20 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                             const SizedBox(height: 12),
                             DropdownButtonFormField<String>(
                               value: estado,
-                              dropdownColor: const Color(0xff2a2f4a),
-                              style: const TextStyle(color: Colors.white),
+                              dropdownColor: Colors.white,
+                              style: const TextStyle(color: Color(0xff0f172a)),
                               decoration: InputDecoration(
                                 labelText: 'Estado Inicial',
+                                labelStyle: const TextStyle(color: Color(0xff64748b), fontSize: 13),
                                 filled: true,
-                                fillColor: const Color(0xff2a2f4a),
+                                fillColor: const Color(0xfff8fafc),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide.none,
+                                  borderSide: const BorderSide(color: Color(0xffcbd5e1)),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(color: Color(0xffcbd5e1)),
                                 ),
                               ),
                               items:
@@ -1133,7 +1142,7 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                                     const Text(
                                       'Certificado PDF asociado:',
                                       style: TextStyle(
-                                        color: Colors.white70,
+                                        color: Color(0xff64748b),
                                         fontSize: 13,
                                       ),
                                     ),
@@ -1360,14 +1369,15 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return AlertDialog(
-              backgroundColor: const Color(0xff1e2235),
+              backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
+                side: const BorderSide(color: Color(0xffe2e8f0)),
               ),
               title: Text(
                 'Editar Instrumento: ${inst['codigo']}',
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: Color(0xff0f172a),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -1433,15 +1443,20 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                                   )
                                   ? ubicacionId
                                   : null,
-                              dropdownColor: const Color(0xff2a2f4a),
-                              style: const TextStyle(color: Colors.white),
+                              dropdownColor: Colors.white,
+                              style: const TextStyle(color: Color(0xff0f172a)),
                               decoration: InputDecoration(
                                 labelText: 'Ubicación',
+                                labelStyle: const TextStyle(color: Color(0xff64748b), fontSize: 13),
                                 filled: true,
-                                fillColor: const Color(0xff2a2f4a),
+                                fillColor: const Color(0xfff8fafc),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide.none,
+                                  borderSide: const BorderSide(color: Color(0xffcbd5e1)),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(color: Color(0xffcbd5e1)),
                                 ),
                               ),
                               items: [
@@ -1507,15 +1522,20 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                                   ].contains(estado.toUpperCase())
                                   ? estado.toUpperCase()
                                   : 'APTO',
-                              dropdownColor: const Color(0xff2a2f4a),
-                              style: const TextStyle(color: Colors.white),
+                              dropdownColor: Colors.white,
+                              style: const TextStyle(color: Color(0xff0f172a)),
                               decoration: InputDecoration(
                                 labelText: 'Estado',
+                                labelStyle: const TextStyle(color: Color(0xff64748b), fontSize: 13),
                                 filled: true,
-                                fillColor: const Color(0xff2a2f4a),
+                                fillColor: const Color(0xfff8fafc),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide.none,
+                                  borderSide: const BorderSide(color: Color(0xffcbd5e1)),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(color: Color(0xffcbd5e1)),
                                 ),
                               ),
                               items:
@@ -1556,7 +1576,7 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                                     const Text(
                                       'Certificado PDF asociado:',
                                       style: TextStyle(
-                                        color: Colors.white70,
+                                        color: Color(0xff64748b),
                                         fontSize: 13,
                                       ),
                                     ),
@@ -1740,7 +1760,7 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff121420),
+      backgroundColor: const Color(0xfff4f6f9),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -1753,7 +1773,7 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                 const Text(
                   'Control de Instrumentos (Metrología)',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color(0xff0f172a),
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
                   ),
@@ -1776,22 +1796,22 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                               onChanged: (value) =>
                                   setState(() => _searchQuery = value),
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: Color(0xff0f172a),
                                 fontSize: 14,
                               ),
                               decoration: InputDecoration(
                                 hintText:
                                     'Buscar por código, nombre, marca o estado...',
                                 hintStyle: const TextStyle(
-                                  color: Colors.white54,
+                                  color: Color(0xff64748b),
                                 ),
                                 prefixIcon: const Icon(
                                   Icons.search,
-                                  color: Colors.white54,
+                                  color: Color(0xff64748b),
                                   size: 20,
                                 ),
                                 filled: true,
-                                fillColor: const Color(0xff1e2235),
+                                fillColor: const Color(0xfff8fafc),
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16,
                                 ),
@@ -1801,8 +1821,8 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: Colors.white.withOpacity(0.05),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xffe2e8f0),
                                   ),
                                 ),
                               ),
@@ -1847,11 +1867,11 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                       const SizedBox(width: 12),
                       PopupMenuButton<String>(
                         tooltip: 'Opciones de Exportación PDF',
-                        color: const Color(0xff1e2230),
+                        color: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: Colors.white.withOpacity(0.1),
+                          side: const BorderSide(
+                            color: Color(0xffcbd5e1),
                           ),
                         ),
                         child: Container(
@@ -1895,13 +1915,13 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                               children: [
                                 Icon(
                                   Icons.inventory_2_outlined,
-                                  color: Colors.cyan,
+                                  color: Color(0xff0284c7),
                                   size: 18,
                                 ),
                                 SizedBox(width: 12),
                                 Text(
                                   'Inventario General',
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Color(0xff0f172a)),
                                 ),
                               ],
                             ),
@@ -1912,13 +1932,13 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                               children: [
                                 Icon(
                                   Icons.filter_list_rounded,
-                                  color: Colors.greenAccent,
+                                  color: Color(0xff10b981),
                                   size: 18,
                                 ),
                                 SizedBox(width: 12),
                                 Text(
                                   'Reporte Filtrado Actual',
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Color(0xff0f172a)),
                                 ),
                               ],
                             ),
@@ -1929,13 +1949,13 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                               children: [
                                 Icon(
                                   Icons.warning_amber_rounded,
-                                  color: Colors.orange,
+                                  color: Color(0xfff59e0b),
                                   size: 18,
                                 ),
                                 SizedBox(width: 12),
                                 Text(
                                   'Reporte de Vencidos',
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Color(0xff0f172a)),
                                 ),
                               ],
                             ),
@@ -2062,6 +2082,8 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                                   horizontal: 24,
                                   vertical: 16,
                                 ),
+                                customColor: const Color(0xfff1f5f9),
+                                borderColor: const Color(0xffcbd5e1),
                                 borderRadius: 12.0,
                                 child: Row(
                                   children: [
@@ -2090,12 +2112,10 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                                       decoration: BoxDecoration(
                                         color: isEven
                                             ? Colors.transparent
-                                            : Colors.white.withOpacity(0.02),
-                                        border: Border(
+                                            : const Color(0xfff8fafc),
+                                        border: const Border(
                                           bottom: BorderSide(
-                                            color: Colors.white.withOpacity(
-                                              0.05,
-                                            ),
+                                            color: Color(0xffe2e8f0),
                                             width: 1,
                                           ),
                                         ),
@@ -2290,7 +2310,7 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
                                                         builder: (c) => AlertDialog(
                                                           backgroundColor:
                                                               const Color(
-                                                                0xff1e2235,
+                                                                0xffffffff,
                                                               ),
                                                           title: const Text(
                                                             'Eliminar',
@@ -2396,7 +2416,7 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
       child: Text(
         text,
         style: const TextStyle(
-          color: Colors.white,
+          color: Color(0xff0f172a),
           fontWeight: FontWeight.bold,
           fontSize: 14,
           letterSpacing: 0.5,
@@ -2416,7 +2436,7 @@ class _InstrumentosScreenState extends State<InstrumentosScreen> {
       child: Text(
         text,
         style: TextStyle(
-          color: isFaded ? Colors.white70 : Colors.white,
+          color: isFaded ? const Color(0xff64748b) : const Color(0xff0f172a),
           fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
           fontSize: 14,
         ),

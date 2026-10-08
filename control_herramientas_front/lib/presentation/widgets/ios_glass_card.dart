@@ -7,6 +7,8 @@ class IosGlassCard extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final double blur;
   final double opacity;
+  final Color? customColor;
+  final Color? borderColor;
   final VoidCallback? onTap;
 
   const IosGlassCard({
@@ -14,15 +16,18 @@ class IosGlassCard extends StatelessWidget {
     required this.child,
     this.borderRadius = 16.0,
     this.padding = const EdgeInsets.all(16.0),
-    this.blur = 12.0,
-    this.opacity = 0.65,
+    this.blur = 16.0,
+    this.opacity = 0.78,
+    this.customColor,
+    this.borderColor,
     this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = const Color(0xFF1E222D).withOpacity(opacity);
-    final borderColor = Colors.white.withOpacity(0.08);
+    final bgColor = (customColor ?? Colors.white).withOpacity(opacity);
+    final borderC = borderColor ?? Colors.white.withOpacity(0.65);
+    final glowColor = borderColor != null ? borderColor!.withOpacity(0.15) : const Color(0x0C000000);
 
     Widget content = Container(
       padding: padding,
@@ -30,9 +35,17 @@ class IosGlassCard extends StatelessWidget {
         color: bgColor,
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
-          color: borderColor,
-          width: 1.0,
+          color: borderC,
+          width: 1.4,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: glowColor,
+            blurRadius: 16,
+            spreadRadius: 1,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: child,
     );
@@ -63,4 +76,3 @@ class IosGlassCard extends StatelessWidget {
     );
   }
 }
-

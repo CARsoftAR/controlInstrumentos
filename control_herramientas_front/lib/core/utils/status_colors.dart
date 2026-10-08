@@ -11,17 +11,17 @@ class StatusColors {
       case 'REPARACION':
         return const Color(0xfff59e0b);
       case 'EN USO':
-        return const Color(0xff06b6d4);
+        return const Color(0xff0284c7);
       case 'BAJA':
-        return Colors.grey;
+        return const Color(0xff64748b);
       case 'DE REFERENCIA':
-        return Colors.purpleAccent;
+        return const Color(0xffa855f7);
       case 'NO EXISTE':
-        return const Color(0xFFFFD54F);
+        return const Color(0xffeab308);
       case 'NO APTO':
-        return Colors.orangeAccent;
+        return const Color(0xfff97316);
       default:
-        return Colors.blueGrey;
+        return const Color(0xff475569);
     }
   }
 }

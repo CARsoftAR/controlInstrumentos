@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/services/api_service.dart';
+import '../../../presentation/widgets/ios_glass_card.dart';
 
 class OperariosScreen extends StatefulWidget {
   final String? initialSearchQuery;
@@ -46,9 +47,9 @@ class _OperariosScreenState extends State<OperariosScreen> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return AlertDialog(
-              backgroundColor: const Color(0xff1e2235),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              title: const Text('Nuevo Operario', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xffe2e8f0))),
+              title: const Text('Nuevo Operario', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold)),
               content: SizedBox(
                 width: 400,
                 child: Column(
@@ -56,54 +57,54 @@ class _OperariosScreenState extends State<OperariosScreen> {
                   children: [
                     TextField(
                       onChanged: (val) => legajo = val,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       decoration: InputDecoration(
                         labelText: 'Legajo (Ej: OP101)',
-                        labelStyle: const TextStyle(color: Colors.white54),
+                        labelStyle: const TextStyle(color: Color(0xff64748b)),
                         filled: true,
-                        fillColor: const Color(0xff2a2f4a),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                        fillColor: const Color(0xfff8fafc),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffcbd5e1))),
                       ),
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       onChanged: (val) => nombre = val,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       decoration: InputDecoration(
                         labelText: 'Nombre Completo',
-                        labelStyle: const TextStyle(color: Colors.white54),
+                        labelStyle: const TextStyle(color: Color(0xff64748b)),
                         filled: true,
-                        fillColor: const Color(0xff2a2f4a),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                        fillColor: const Color(0xfff8fafc),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffcbd5e1))),
                       ),
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       onChanged: (val) => cargo = val,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       decoration: InputDecoration(
                         labelText: 'Especialidad / Cargo (Opcional)',
-                        labelStyle: const TextStyle(color: Colors.white54),
+                        labelStyle: const TextStyle(color: Color(0xff64748b)),
                         filled: true,
-                        fillColor: const Color(0xff2a2f4a),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                        fillColor: const Color(0xfff8fafc),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffcbd5e1))),
                       ),
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<bool>(
                       value: activo,
-                      dropdownColor: const Color(0xff2a2f4a),
-                      style: const TextStyle(color: Colors.white),
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       decoration: InputDecoration(
                         labelText: 'Estado Inicial',
-                        labelStyle: const TextStyle(color: Colors.white54),
+                        labelStyle: const TextStyle(color: Color(0xff64748b)),
                         filled: true,
-                        fillColor: const Color(0xff2a2f4a),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                        fillColor: const Color(0xfff8fafc),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffcbd5e1))),
                       ),
                       items: const [
-                        DropdownMenuItem(value: true, child: Text('Activo')),
-                        DropdownMenuItem(value: false, child: Text('Inactivo')),
+                        DropdownMenuItem(value: true, child: Text('Activo', style: TextStyle(color: Color(0xff0f172a)))),
+                        DropdownMenuItem(value: false, child: Text('Inactivo', style: TextStyle(color: Color(0xff0f172a)))),
                       ],
                       onChanged: (val) => activo = val!,
                     ),
@@ -113,7 +114,7 @@ class _OperariosScreenState extends State<OperariosScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(foregroundColor: Colors.white),
+                  style: TextButton.styleFrom(foregroundColor: const Color(0xff64748b)),
                   child: const Text('Cancelar'),
                 ),
                 ElevatedButton(
@@ -159,9 +160,9 @@ class _OperariosScreenState extends State<OperariosScreen> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return AlertDialog(
-              backgroundColor: const Color(0xff1e2235),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              title: Text('Editar Operario: ${op['legajo']}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xffe2e8f0))),
+              title: Text('Editar Operario: ${op['legajo']}', style: const TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold)),
               content: SizedBox(
                 width: 400,
                 child: Column(
@@ -170,43 +171,43 @@ class _OperariosScreenState extends State<OperariosScreen> {
                     TextField(
                       controller: TextEditingController(text: nombre)..selection = TextSelection.collapsed(offset: nombre.length),
                       onChanged: (val) => nombre = val,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       decoration: InputDecoration(
                         labelText: 'Nombre Completo',
-                        labelStyle: const TextStyle(color: Colors.white54),
+                        labelStyle: const TextStyle(color: Color(0xff64748b)),
                         filled: true,
-                        fillColor: const Color(0xff2a2f4a),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                        fillColor: const Color(0xfff8fafc),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffcbd5e1))),
                       ),
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: TextEditingController(text: cargo)..selection = TextSelection.collapsed(offset: cargo.length),
                       onChanged: (val) => cargo = val,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       decoration: InputDecoration(
                         labelText: 'Especialidad / Cargo (Opcional)',
-                        labelStyle: const TextStyle(color: Colors.white54),
+                        labelStyle: const TextStyle(color: Color(0xff64748b)),
                         filled: true,
-                        fillColor: const Color(0xff2a2f4a),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                        fillColor: const Color(0xfff8fafc),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffcbd5e1))),
                       ),
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<bool>(
                       value: activo,
-                      dropdownColor: const Color(0xff2a2f4a),
-                      style: const TextStyle(color: Colors.white),
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       decoration: InputDecoration(
                         labelText: 'Estado',
-                        labelStyle: const TextStyle(color: Colors.white54),
+                        labelStyle: const TextStyle(color: Color(0xff64748b)),
                         filled: true,
-                        fillColor: const Color(0xff2a2f4a),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                        fillColor: const Color(0xfff8fafc),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xffcbd5e1))),
                       ),
                       items: const [
-                        DropdownMenuItem(value: true, child: Text('Activo')),
-                        DropdownMenuItem(value: false, child: Text('Inactivo')),
+                        DropdownMenuItem(value: true, child: Text('Activo', style: TextStyle(color: Color(0xff0f172a)))),
+                        DropdownMenuItem(value: false, child: Text('Inactivo', style: TextStyle(color: Color(0xff0f172a)))),
                       ],
                       onChanged: (val) => activo = val!,
                     ),
@@ -216,7 +217,7 @@ class _OperariosScreenState extends State<OperariosScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(foregroundColor: Colors.white),
+                  style: TextButton.styleFrom(foregroundColor: const Color(0xff64748b)),
                   child: const Text('Cancelar'),
                 ),
                 ElevatedButton(
@@ -254,11 +255,12 @@ class _OperariosScreenState extends State<OperariosScreen> {
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-        backgroundColor: const Color(0xff1e2235),
-        title: const Text('Confirmar Eliminación', style: TextStyle(color: Colors.white)),
-        content: Text('¿Estás seguro que deseas eliminar al operario ${op['nombre']} (${op['legajo']})? Esto no se puede deshacer.', style: const TextStyle(color: Colors.white70)),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xffe2e8f0))),
+        title: const Text('Confirmar Eliminación', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold)),
+        content: Text('¿Estás seguro que deseas eliminar al operario ${op['nombre']} (${op['legajo']})? Esto no se puede deshacer.', style: const TextStyle(color: Color(0xff475569))),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(c), style: TextButton.styleFrom(foregroundColor: Colors.white), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(c), style: TextButton.styleFrom(foregroundColor: const Color(0xff64748b)), child: const Text('Cancelar')),
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(c);
@@ -279,222 +281,208 @@ class _OperariosScreenState extends State<OperariosScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: Color(0xff06b6d4)),
-      );
-    }
-
-    if (_operarios.isEmpty) {
-      return Center(
+    return Scaffold(
+      backgroundColor: const Color(0xfff4f6f9),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.badge_outlined, size: 64, color: Colors.grey),
-            const SizedBox(height: 16),
-            const Text(
-              'No se encontraron operarios registrados.',
-              style: TextStyle(color: Colors.grey, fontSize: 16),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: _cargarOperarios,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Reintentar conexión'),
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff4f46e5)),
-            )
-          ],
-        ),
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Nómina de Personal Técnico',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Flexible(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 300),
-                      child: SizedBox(
-                        height: 44,
-                  child: TextField(
-                    controller: TextEditingController(text: _searchQuery)..selection = TextSelection.collapsed(offset: _searchQuery.length),
-                    onChanged: (value) => setState(() => _searchQuery = value),
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
-                    decoration: InputDecoration(
-                      hintText: 'Buscar por legajo, nombre o estado...',
-                      hintStyle: const TextStyle(color: Colors.white54),
-                      prefixIcon: const Icon(Icons.search, color: Colors.white54, size: 20),
-                      filled: true,
-                      fillColor: const Color(0xff1e2235),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.white.withOpacity(0.05)),
-                      ),
-                    ),
-                  ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  ElevatedButton.icon(
-                    onPressed: _mostrarModalNuevoOperario,
-                    icon: const Icon(Icons.add),
-                    label: const Text('Nuevo Operario'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff10b981),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  ElevatedButton.icon(
-                    onPressed: _cargarOperarios,
-                    icon: const Icon(Icons.refresh_rounded),
-                    label: const Text('Actualizar'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff4f46e5),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 24),
-        Builder(
-          builder: (context) {
-            final operariosFiltrados = _operarios.where((op) {
-              if (_searchQuery.isEmpty) return true;
-              final q = _searchQuery.toLowerCase();
-              final legajo = (op['legajo'] ?? '').toString().toLowerCase();
-              final nombreCompleto = '${op['nombre'] ?? ''} ${op['apellido'] ?? ''}'.toLowerCase();
-              return legajo.contains(q) || nombreCompleto.contains(q);
-            }).toList();
-            return Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xff1e2235),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withOpacity(0.05)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
-                    )
-                  ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Nómina de Personal Técnico',
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xff0f172a)),
                 ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                      decoration: const BoxDecoration(
-                        color: Color(0xff2a2f4a),
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                      ),
-                      child: Row(
-                        children: [
-                          _buildHeaderCell('Legajo', flex: 2),
-                          _buildHeaderCell('Nombre Completo', flex: 5),
-                          _buildHeaderCell('Especialidad', flex: 3),
-                          _buildHeaderCell('Estado', flex: 2),
-                          _buildHeaderCell('Acciones', flex: 1),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: operariosFiltrados.length,
-                        itemBuilder: (context, index) {
-                          final operario = operariosFiltrados[index];
-                          final isEven = index % 2 == 0;
-                          final bool activo = operario['activo'] ?? true;
-                          return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                            decoration: BoxDecoration(
-                              color: isEven ? Colors.transparent : Colors.white.withOpacity(0.02),
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.white.withOpacity(0.05),
-                                  width: 1,
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 300),
+                          child: SizedBox(
+                            height: 44,
+                            child: TextField(
+                              controller: TextEditingController(text: _searchQuery)..selection = TextSelection.collapsed(offset: _searchQuery.length),
+                              onChanged: (value) => setState(() => _searchQuery = value),
+                              style: const TextStyle(color: Color(0xff0f172a), fontSize: 14),
+                              decoration: InputDecoration(
+                                hintText: 'Buscar por legajo, nombre o estado...',
+                                hintStyle: const TextStyle(color: Color(0xff64748b)),
+                                prefixIcon: const Icon(Icons.search, color: Color(0xff64748b), size: 20),
+                                filled: true,
+                                fillColor: const Color(0xfff8fafc),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide.none,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(color: Color(0xffe2e8f0)),
                                 ),
                               ),
                             ),
-                            child: Row(
-                              children: [
-                                _buildDataCell(operario['legajo']?.toString() ?? '-', flex: 2, isBold: true, color: const Color(0xff06b6d4)),
-                                _buildDataCell('${operario['nombre'] ?? ''} ${operario['apellido'] ?? ''}', flex: 5),
-                                _buildDataCell(operario['especialidad'] ?? 'General', flex: 3, isFaded: true),
-                                Expanded(
-                                  flex: 2,
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: activo ? Colors.greenAccent.withOpacity(0.15) : Colors.redAccent.withOpacity(0.15),
-                                        borderRadius: BorderRadius.circular(6),
-                                        border: Border.all(color: activo ? Colors.greenAccent.withOpacity(0.3) : Colors.redAccent.withOpacity(0.3)),
-                                      ),
-                                      child: Text(
-                                        activo ? 'Activo' : 'Inactivo',
-                                        style: TextStyle(
-                                          color: activo ? Colors.greenAccent : Colors.redAccent,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                        ),
-                                      ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      ElevatedButton.icon(
+                        onPressed: _mostrarModalNuevoOperario,
+                        icon: const Icon(Icons.add),
+                        label: const Text('Nuevo Operario'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff10b981),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      ElevatedButton.icon(
+                        onPressed: _cargarOperarios,
+                        icon: const Icon(Icons.refresh_rounded),
+                        label: const Text('Actualizar'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff6366f1),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Builder(
+              builder: (context) {
+                if (_isLoading) {
+                  return const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(color: Color(0xff6366f1)),
+                    ),
+                  );
+                }
+
+                final operariosFiltrados = _operarios.where((op) {
+                  if (_searchQuery.isEmpty) return true;
+                  final q = _searchQuery.toLowerCase();
+                  final legajo = (op['legajo'] ?? '').toString().toLowerCase();
+                  final nombreCompleto = '${op['nombre'] ?? ''} ${op['apellido'] ?? ''}'.toLowerCase();
+                  return legajo.contains(q) || nombreCompleto.contains(q);
+                }).toList();
+
+                return Expanded(
+                  child: IosGlassCard(
+                    padding: EdgeInsets.zero,
+                    customColor: Colors.white.withOpacity(0.85),
+                    borderColor: const Color(0xffcbd5e1),
+                    child: Column(
+                      children: [
+                        IosGlassCard(
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          customColor: const Color(0xfff1f5f9),
+                          borderColor: const Color(0xffcbd5e1),
+                          borderRadius: 12.0,
+                          child: Row(
+                            children: [
+                              _buildHeaderCell('Legajo', flex: 2),
+                              _buildHeaderCell('Nombre Completo', flex: 5),
+                              _buildHeaderCell('Especialidad', flex: 3),
+                              _buildHeaderCell('Estado', flex: 2),
+                              _buildHeaderCell('Acciones', flex: 1),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: operariosFiltrados.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                    'No se encontraron operarios registrados.',
+                                    style: TextStyle(
+                                      color: Color(0xff64748b),
+                                      fontSize: 16,
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Row(
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(Icons.edit, color: Colors.blueAccent, size: 20),
-                                        onPressed: () => _mostrarModalEditarOperario(operario),
-                                        tooltip: 'Editar',
+                                )
+                              : ListView.builder(
+                                  itemCount: operariosFiltrados.length,
+                                  itemBuilder: (context, index) {
+                                    final operario = operariosFiltrados[index];
+                                    final isEven = index % 2 == 0;
+                                    final bool activo = operario['activo'] ?? true;
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                                      decoration: BoxDecoration(
+                                        color: isEven ? Colors.transparent : const Color(0xfff8fafc),
+                                        border: const Border(
+                                          bottom: BorderSide(
+                                            color: Color(0xffe2e8f0),
+                                            width: 1,
+                                          ),
+                                        ),
                                       ),
-                                      IconButton(
-                                        icon: const Icon(Icons.delete, color: Colors.redAccent, size: 20),
-                                        onPressed: () => _confirmarBorrado(operario),
-                                        tooltip: 'Eliminar',
+                                      child: Row(
+                                        children: [
+                                          _buildDataCell(operario['legajo']?.toString() ?? '-', flex: 2, isBold: true, color: const Color(0xff0284c7)),
+                                          _buildDataCell('${operario['nombre'] ?? ''} ${operario['apellido'] ?? ''}', flex: 5),
+                                          _buildDataCell(operario['especialidad'] ?? 'General', flex: 3, isFaded: true),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                                decoration: BoxDecoration(
+                                                  color: activo ? const Color(0xff10b981).withOpacity(0.12) : Colors.redAccent.withOpacity(0.12),
+                                                  borderRadius: BorderRadius.circular(6),
+                                                  border: Border.all(color: activo ? const Color(0xff10b981).withOpacity(0.4) : Colors.redAccent.withOpacity(0.4)),
+                                                ),
+                                                child: Text(
+                                                  activo ? 'Activo' : 'Inactivo',
+                                                  style: TextStyle(
+                                                    color: activo ? const Color(0xff10b981) : Colors.redAccent,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Row(
+                                              children: [
+                                                IconButton(
+                                                  icon: const Icon(Icons.edit, color: Color(0xff0284c7), size: 20),
+                                                  onPressed: () => _mostrarModalEditarOperario(operario),
+                                                  tooltip: 'Editar',
+                                                ),
+                                                IconButton(
+                                                  icon: const Icon(Icons.delete, color: Colors.redAccent, size: 20),
+                                                  onPressed: () => _confirmarBorrado(operario),
+                                                  tooltip: 'Eliminar',
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    );
+                                  },
                                 ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            );
-          },
+                  ),
+                );
+              },
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -504,7 +492,7 @@ class _OperariosScreenState extends State<OperariosScreen> {
       child: Text(
         text,
         style: const TextStyle(
-          color: Colors.white,
+          color: Color(0xff0f172a),
           fontWeight: FontWeight.bold,
           fontSize: 14,
           letterSpacing: 0.5,
@@ -519,7 +507,7 @@ class _OperariosScreenState extends State<OperariosScreen> {
       child: Text(
         text,
         style: TextStyle(
-          color: color ?? (isFaded ? Colors.white70 : Colors.white),
+          color: color ?? (isFaded ? const Color(0xff64748b) : const Color(0xff0f172a)),
           fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
           fontSize: 14,
         ),

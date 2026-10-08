@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff0d0f16), // Deep dark background
+      backgroundColor: const Color(0xfff4f6f9),
       body: Center(
         child: FadeTransition(
           opacity: _fadeAnimation,
@@ -70,16 +70,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: const Color(0xff1e2230),
+                    color: Colors.white.withOpacity(0.85),
                     shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xff4f46e5).withOpacity(0.5),
+                        color: const Color(0xFFFC7D17).withOpacity(0.2),
                         blurRadius: 30,
                         spreadRadius: 5,
                       ),
                       BoxShadow(
-                        color: const Color(0xff06b6d4).withOpacity(0.3),
+                        color: const Color(0xFF6366F1).withOpacity(0.1),
                         blurRadius: 20,
                         spreadRadius: -5,
                       ),
@@ -88,7 +89,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   child: const Icon(
                     Icons.precision_manufacturing_rounded,
                     size: 80,
-                    color: Color(0xff06b6d4),
+                    color: Color(0xFFFC7D17),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -117,9 +118,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   'Gestión y Control de Instrumentos',
                   style: GoogleFonts.inter(
                     fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 6.0,
-                    color: const Color(0xff06b6d4),
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 4.0,
+                    color: const Color(0xff475569),
                   ),
                 ),
                 
@@ -130,7 +131,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   width: 40,
                   height: 40,
                   child: CircularProgressIndicator(
-                    color: Color(0xff4f46e5),
+                    color: Color(0xff6366f1),
                     strokeWidth: 3,
                   ),
                 ),
@@ -140,7 +141,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   'Iniciando Sistema...',
                   style: GoogleFonts.inter(
                     fontSize: 14,
-                    color: Colors.white54,
+                    color: const Color(0xff64748b),
                   ),
                 ),
               ],

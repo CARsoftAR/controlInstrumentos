@@ -55,7 +55,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
           children: [
             const Icon(Icons.error_outline, color: Colors.redAccent, size: 60),
             const SizedBox(height: 16),
-            const Text('Error al cargar las estadísticas', style: TextStyle(color: Colors.white70, fontSize: 18)),
+            const Text('Error al cargar las estadísticas', style: TextStyle(color: Color(0xff64748b), fontSize: 18)),
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: _loadStats,
@@ -88,11 +88,11 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Text(
                   'Filtro por Categoría',
-                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white54),
+                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.bold, color: const Color(0xff64748b)),
                 ),
               ),
               _buildCategoryItem(null, 'Vista Global / Todos', Icons.dashboard_rounded, null),
-              const Divider(color: Colors.white10, height: 1),
+              const Divider(color: Color(0xffe2e8f0), height: 1),
               Expanded(
                 child: ListView.builder(
                   itemCount: globalCategorias.keys.length,
@@ -124,12 +124,12 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: const Color(0xff0f172a),
                           ),
                         ),
                         IconButton(
                           onPressed: _loadStats,
-                          icon: const Icon(Icons.refresh, color: Colors.white70),
+                          icon: const Icon(Icons.refresh, color: Color(0xff64748b)),
                           tooltip: 'Actualizar',
                         )
                       ],
@@ -183,7 +183,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
               if (_isLoading)
                 Positioned.fill(
                   child: Container(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.white.withOpacity(0.3),
                     child: const Center(child: CircularProgressIndicator(color: Color(0xff4f46e5))),
                   ),
                 ),
@@ -214,7 +214,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
             Icon(
               icon,
               size: 20,
-              color: isSelected ? const Color(0xff4f46e5) : Colors.white54,
+              color: isSelected ? const Color(0xff4f46e5) : const Color(0xff64748b),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -223,7 +223,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  color: isSelected ? Colors.white : Colors.white70,
+                  color: isSelected ? const Color(0xff4f46e5) : const Color(0xff334155),
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -232,12 +232,12 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05),
+                  color: const Color(0xff4f46e5).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   count.toString(),
-                  style: const TextStyle(color: Colors.white54, fontSize: 12, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: Color(0xff4f46e5), fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ),
           ],
@@ -256,12 +256,12 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
         children: [
           Row(
             children: [
-              Icon(icon, color: const Color(0xff06b6d4), size: 24),
+              Icon(icon, color: const Color(0xff0284c7), size: 24),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   title,
-                  style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white70),
+                  style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: const Color(0xff0f172a)),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -276,11 +276,11 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
   }
 
   Widget _buildPieChartWithLegend(Map<String, dynamic> data) {
-    if (data.isEmpty) return const Center(child: Text('Sin datos', style: TextStyle(color: Colors.white54)));
+    if (data.isEmpty) return const Center(child: Text('Sin datos', style: TextStyle(color: Color(0xff64748b))));
 
     final colors = [
       const Color(0xff4f46e5),
-      const Color(0xff06b6d4),
+      const Color(0xff0284c7),
       const Color(0xff10b981),
       const Color(0xfff59e0b),
       const Color(0xffef4444),
@@ -318,7 +318,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
                 Expanded(
                   child: Text(
                     '$key (${val.toInt()})',
-                    style: const TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Color(0xff334155), fontSize: 13, fontWeight: FontWeight.bold),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -358,7 +358,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
   }
 
   Widget _buildBarChart(Map<String, dynamic> data) {
-    if (data.isEmpty) return const Center(child: Text('Sin datos', style: TextStyle(color: Colors.white54)));
+    if (data.isEmpty) return const Center(child: Text('Sin datos', style: TextStyle(color: Color(0xff64748b))));
 
     var sortedEntries = data.entries.toList()
       ..sort((a, b) => (b.value as int).compareTo(a.value as int));
@@ -381,7 +381,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
           enabled: true,
           touchTooltipData: BarTouchTooltipData(
             tooltipPadding: const EdgeInsets.all(8),
-            getTooltipColor: (group) => const Color(0xff374151),
+            getTooltipColor: (group) => const Color(0xff0f172a),
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               return BarTooltipItem(
                 '${sortedEntries[group.x.toInt()].key}\n',
@@ -389,7 +389,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
                 children: <TextSpan>[
                   TextSpan(
                     text: (rod.toY).toInt().toString(),
-                    style: const TextStyle(color: Color(0xff06b6d4), fontSize: 14, fontWeight: FontWeight.w500),
+                    style: const TextStyle(color: Color(0xff38bdf8), fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                 ],
               );
@@ -409,7 +409,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(
                     shortText,
-                    style: const TextStyle(color: Colors.white70, fontSize: 10),
+                    style: const TextStyle(color: Color(0xff64748b), fontSize: 10),
                     textAlign: TextAlign.center,
                   ),
                 );
@@ -424,7 +424,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
                 if (value % 1 != 0) return const SizedBox.shrink();
                 return Text(
                   value.toInt().toString(),
-                  style: const TextStyle(color: Colors.white54, fontSize: 11),
+                  style: const TextStyle(color: Color(0xff64748b), fontSize: 11),
                 );
               },
               reservedSize: 28,
@@ -437,7 +437,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
           show: true,
           drawVerticalLine: false,
           horizontalInterval: maxY > 10 ? (maxY / 5).ceilToDouble() : 1,
-          getDrawingHorizontalLine: (value) => FlLine(color: Colors.white.withOpacity(0.05), strokeWidth: 1),
+          getDrawingHorizontalLine: (value) => FlLine(color: const Color(0xffe2e8f0), strokeWidth: 1),
         ),
         borderData: FlBorderData(show: false),
         barGroups: List.generate(
@@ -448,7 +448,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
               BarChartRodData(
                 toY: (sortedEntries[i].value as int).toDouble(),
                 gradient: const LinearGradient(
-                  colors: [Color(0xff4f46e5), Color(0xff06b6d4)],
+                  colors: [Color(0xff4f46e5), Color(0xff0284c7)],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                 ),
@@ -467,10 +467,9 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
 
   Widget _buildVencimientosChart(List<dynamic> vencimientos) {
     if (vencimientos.isEmpty) {
-      return const Center(child: Text('No hay vencimientos próximos', style: TextStyle(color: Colors.white54)));
+      return const Center(child: Text('No hay vencimientos próximos', style: TextStyle(color: Color(0xff64748b))));
     }
 
-    // Agrupar por días restantes (0-10, 11-20, 21-30, etc)
     Map<int, int> grouped = {
       10: 0, 20: 0, 30: 0, 60: 0,
     };
@@ -504,7 +503,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
           show: true,
           drawVerticalLine: false,
           horizontalInterval: maxY > 5 ? (maxY / 5).ceilToDouble() : 1,
-          getDrawingHorizontalLine: (value) => FlLine(color: Colors.white.withOpacity(0.05), strokeWidth: 1),
+          getDrawingHorizontalLine: (value) => FlLine(color: const Color(0xffe2e8f0), strokeWidth: 1),
         ),
         titlesData: FlTitlesData(
           show: true,
@@ -514,10 +513,10 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
               reservedSize: 30,
               getTitlesWidget: (value, meta) {
                 switch(value.toInt()) {
-                  case 1: return const Padding(padding: EdgeInsets.only(top: 8), child: Text('< 10d', style: TextStyle(color: Colors.white54, fontSize: 11)));
-                  case 2: return const Padding(padding: EdgeInsets.only(top: 8), child: Text('10-20d', style: TextStyle(color: Colors.white54, fontSize: 11)));
-                  case 3: return const Padding(padding: EdgeInsets.only(top: 8), child: Text('20-30d', style: TextStyle(color: Colors.white54, fontSize: 11)));
-                  case 4: return const Padding(padding: EdgeInsets.only(top: 8), child: Text('> 30d', style: TextStyle(color: Colors.white54, fontSize: 11)));
+                  case 1: return const Padding(padding: EdgeInsets.only(top: 8), child: Text('< 10d', style: TextStyle(color: Color(0xff64748b), fontSize: 11)));
+                  case 2: return const Padding(padding: EdgeInsets.only(top: 8), child: Text('10-20d', style: TextStyle(color: Color(0xff64748b), fontSize: 11)));
+                  case 3: return const Padding(padding: EdgeInsets.only(top: 8), child: Text('20-30d', style: TextStyle(color: Color(0xff64748b), fontSize: 11)));
+                  case 4: return const Padding(padding: EdgeInsets.only(top: 8), child: Text('> 30d', style: TextStyle(color: Color(0xff64748b), fontSize: 11)));
                   default: return const SizedBox.shrink();
                 }
               },
@@ -529,7 +528,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
               reservedSize: 28,
               getTitlesWidget: (value, meta) {
                 if (value % 1 != 0) return const SizedBox.shrink();
-                return Text(value.toInt().toString(), style: const TextStyle(color: Colors.white54, fontSize: 11));
+                return Text(value.toInt().toString(), style: const TextStyle(color: Color(0xff64748b), fontSize: 11));
               },
             ),
           ),
@@ -556,7 +555,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
   }
 
   Widget _buildTasaAprobacionChart(Map<String, dynamic> data) {
-    if (data.isEmpty) return const Center(child: Text('Sin datos', style: TextStyle(color: Colors.white54)));
+    if (data.isEmpty) return const Center(child: Text('Sin datos', style: TextStyle(color: Color(0xff64748b))));
 
     double total = 0;
     double aprobados = 0;
@@ -572,7 +571,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
       }
     });
 
-    if (total == 0) return const Center(child: Text('Sin datos válidos', style: TextStyle(color: Colors.white54)));
+    if (total == 0) return const Center(child: Text('Sin datos válidos', style: TextStyle(color: Color(0xff64748b))));
 
     double pctAprobados = (aprobados / total) * 100;
     double pctNoAprobados = (noAprobados / total) * 100;
@@ -593,7 +592,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
           child: Container(
             height: 24,
             width: double.infinity,
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.05)),
+            decoration: const BoxDecoration(color: Color(0xffe2e8f0)),
             child: Row(
               children: [
                 if (pctAprobados > 0)
@@ -613,7 +612,7 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
         const SizedBox(height: 16),
         const Text(
           'El progreso indica la proporción de instrumentos en estado APTO frente al total registrado.',
-          style: TextStyle(color: Colors.white54, fontSize: 12),
+          style: TextStyle(color: Color(0xff64748b), fontSize: 12),
           textAlign: TextAlign.center,
         )
       ],
@@ -630,12 +629,12 @@ class _EstadisticasScreenState extends State<EstadisticasScreen> {
         const SizedBox(height: 4),
         Text(
           label,
-          style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w500),
+          style: const TextStyle(color: Color(0xff0f172a), fontSize: 14, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 2),
         Text(
           '($count instrumentos)',
-          style: const TextStyle(color: Colors.white38, fontSize: 12),
+          style: const TextStyle(color: Color(0xff64748b), fontSize: 12),
         ),
       ],
     );

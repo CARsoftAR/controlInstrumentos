@@ -52,15 +52,15 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('Nuevo Usuario', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
+                      const Text('Nuevo Usuario', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold, fontSize: 20)),
                       const SizedBox(height: 24),
                     TextField(
                       decoration: const InputDecoration(
                         labelText: 'Nombre de Usuario',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => username = val,
                     ),
                     const SizedBox(height: 16),
@@ -68,18 +68,18 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                       obscureText: true,
                       decoration: const InputDecoration(
                         labelText: 'Contraseña',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => password = val,
                     ),
                     const SizedBox(height: 24),
                     SwitchListTile(
-                      title: const Text('Rol Administrador', style: TextStyle(color: Colors.white70)),
-                      subtitle: const Text('Permite gestionar backups y usuarios', style: TextStyle(color: Colors.white30, fontSize: 11)),
+                      title: const Text('Rol Administrador', style: TextStyle(color: Color(0xff1e293b), fontWeight: FontWeight.w600)),
+                      subtitle: const Text('Permite gestionar backups y usuarios', style: TextStyle(color: Color(0xff64748b), fontSize: 11)),
                       value: isStaff,
-                      activeColor: const Color(0xff06b6d4),
+                      activeColor: const Color(0xFFFC7D17),
                       onChanged: (val) => setModalState(() => isStaff = val),
                     ),
                       const SizedBox(height: 24),
@@ -88,7 +88,7 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                         children: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
-                            style: TextButton.styleFrom(foregroundColor: Colors.white54),
+                            style: TextButton.styleFrom(foregroundColor: const Color(0xff64748b)),
                             child: const Text('Cancelar'),
                           ),
                           ElevatedButton(
@@ -158,16 +158,16 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('Editar Usuario', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
+                      const Text('Editar Usuario', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold, fontSize: 20)),
                       const SizedBox(height: 24),
                     TextFormField(
                       initialValue: username,
                       decoration: const InputDecoration(
                         labelText: 'Nombre de Usuario',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => username = val,
                     ),
                     const SizedBox(height: 16),
@@ -175,18 +175,18 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                       obscureText: true,
                       decoration: const InputDecoration(
                         labelText: 'Nueva Contraseña (dejar vacío para mantener actual)',
-                        labelStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        labelStyle: TextStyle(color: Color(0xff64748b)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xffcbd5e1))),
                       ),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Color(0xff0f172a)),
                       onChanged: (val) => password = val,
                     ),
                     const SizedBox(height: 24),
                     SwitchListTile(
-                      title: const Text('Rol Administrador', style: TextStyle(color: Colors.white70)),
-                      subtitle: const Text('Permite gestionar backups y usuarios', style: TextStyle(color: Colors.white30, fontSize: 11)),
+                      title: const Text('Rol Administrador', style: TextStyle(color: Color(0xff1e293b), fontWeight: FontWeight.w600)),
+                      subtitle: const Text('Permite gestionar backups y usuarios', style: TextStyle(color: Color(0xff64748b), fontSize: 11)),
                       value: isStaff,
-                      activeColor: const Color(0xff06b6d4),
+                      activeColor: const Color(0xFFFC7D17),
                       onChanged: (val) => setModalState(() => isStaff = val),
                     ),
                       const SizedBox(height: 24),
@@ -195,7 +195,7 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                         children: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
-                            style: TextButton.styleFrom(foregroundColor: Colors.white54),
+                            style: TextButton.styleFrom(foregroundColor: const Color(0xff64748b)),
                             child: const Text('Cancelar'),
                           ),
                           ElevatedButton(
@@ -247,13 +247,14 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: const Color(0xff1a1d29),
-          title: const Text('¿Eliminar usuario?', style: TextStyle(color: Colors.white)),
-          content: Text('¿Seguro que deseas eliminar permanentemente al usuario "$name"?', style: const TextStyle(color: Colors.white70)),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xffe2e8f0))),
+          title: const Text('¿Eliminar usuario?', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold)),
+          content: Text('¿Seguro que deseas eliminar permanentemente al usuario "$name"?', style: const TextStyle(color: Color(0xff475569))),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar', style: TextStyle(color: Colors.white54)),
+              child: const Text('Cancelar', style: TextStyle(color: Color(0xff64748b))),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -284,7 +285,7 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator(color: Color(0xff4f46e5)));
+      return const Center(child: CircularProgressIndicator(color: Color(0xff6366f1)));
     }
 
     final filteredUsers = _usuarios.where((u) {
@@ -307,18 +308,18 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                   child: SizedBox(
                     height: 44,
                     child: TextField(
-                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                      style: const TextStyle(color: Color(0xff0f172a), fontSize: 14),
                       decoration: InputDecoration(
                         hintText: 'Buscar usuario...',
-                        hintStyle: const TextStyle(color: Colors.white54),
-                        prefixIcon: const Icon(Icons.search, color: Colors.white54, size: 20),
+                        hintStyle: const TextStyle(color: Color(0xff64748b)),
+                        prefixIcon: const Icon(Icons.search, color: Color(0xff64748b), size: 20),
                         filled: true,
-                        fillColor: const Color(0xff1e2235),
+                        fillColor: const Color(0xfff8fafc),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.05)),
+                          borderSide: const BorderSide(color: Color(0xffe2e8f0)),
                         ),
                       ),
                       onChanged: (val) => setState(() => _searchQuery = val),
@@ -341,7 +342,7 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                   const SizedBox(width: 16),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff4f46e5),
+                      backgroundColor: const Color(0xff6366f1),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
@@ -362,13 +363,13 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                 child: ListView(
                   children: [
                     DataTable(
-                      headingRowColor: MaterialStateProperty.all(const Color(0xff1e2235)),
+                      headingRowColor: MaterialStateProperty.all(const Color(0xfff1f5f9)),
                       dataRowHeight: 52,
                       columns: const [
-                        DataColumn(label: Text('ID', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
-                        DataColumn(label: Text('Nombre de Usuario', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
-                        DataColumn(label: Text('Rol / Permisos', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
-                        DataColumn(label: Text('Acciones', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('ID', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('Nombre de Usuario', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('Rol / Permisos', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('Acciones', style: TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.bold))),
                       ],
                       rows: filteredUsers.map((u) {
                         final id = u['id'] ?? 0;
@@ -377,19 +378,19 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
 
                         return DataRow(
                           cells: [
-                            DataCell(Text(id.toString(), style: const TextStyle(color: Colors.white70))),
-                            DataCell(Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500))),
+                            DataCell(Text(id.toString(), style: const TextStyle(color: Color(0xff64748b)))),
+                            DataCell(Text(name, style: const TextStyle(color: Color(0xff0f172a), fontWeight: FontWeight.w600))),
                             DataCell(
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: isStaff ? const Color(0xff06b6d4).withOpacity(0.15) : const Color(0xff4f46e5).withOpacity(0.15),
+                                  color: isStaff ? const Color(0xFFFC7D17).withOpacity(0.12) : const Color(0xff6366f1).withOpacity(0.12),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
                                   isStaff ? 'Administrador' : 'Operador / Usuario',
                                   style: TextStyle(
-                                    color: isStaff ? const Color(0xff06b6d4) : const Color(0xffa5b4fc),
+                                    color: isStaff ? const Color(0xFFFC7D17) : const Color(0xff4338ca),
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -400,7 +401,7 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
                               Row(
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.edit, color: Colors.blueAccent, size: 20),
+                                    icon: const Icon(Icons.edit, color: Color(0xff0284c7), size: 20),
                                     tooltip: 'Editar Usuario',
                                     onPressed: () => _mostrarModalEditarUsuario(u),
                                   ),
